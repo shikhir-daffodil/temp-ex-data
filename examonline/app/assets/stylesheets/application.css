@@ -1,0 +1,65 @@
+.forms{
+    height: fit-content;
+    width: 350px;
+    margin: 50px auto;
+    background-color: lightgrey;
+    color: #424262;
+    text-align: center;
+    box-shadow: 8px 8px 3px rgba(0, 0, 0, 0.5);
+}
+.field_with_errors input{
+    box-shadow: 1px 1px 3px #fe6668;
+}
+hr{
+    width: 100%;
+    alignment-adjust: middle;
+    text-shadow: 50px;
+    color: white;
+}
+.forms_container{
+    width:65%;
+    margin: auto;
+    text-align: left;
+    font-size: 14px;
+}
+input[type=text],input[type=password],input[type=email],input[type=tel],input[type=number]{
+    color:#000;
+    font-size: initial;
+    width: 100%;
+    margin-bottom: 10px;
+}
+input[type=submit]{
+    margin: 10px auto 15px auto;
+    width: 100%;
+}
+.errors{
+    margin:35px auto auto auto;
+    background-color: lightgrey;
+    color: #424262;
+    text-align: left;
+    font-size: 13px;
+}
+.errors ul{
+    list-style-type: none;
+}
+.errors li{
+    list-style-type: none;
+}
+a:visited, a{
+    color: #b61f06;
+    text-decoration: none;
+    font-size: smaller;
+}
+body{
+    background-color:#E7DEC6;
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#E7DEC6, endColorstr=#8C836B);
+    background-image:-moz-linear-gradient(top, #E7DEC6 0%, #8C836B 50%,#E7DEC6 100%);
+    background-image:linear-gradient(top, #E7DEC6 0%, #8C836B 50%,#E7DEC6 100%);
+    background-image:-webkit-linear-gradient(top, #E7DEC6 0%, #8C836B 50%,#E7DEC6 100%);
+    background-image:-o-linear-gradient(top, #E7DEC6 0%, #8C836B 50%,#E7DEC6 100%);
+    background-image:-ms-linear-gradient(top, #E7DEC6 0%, #8C836B 50%,#E7DEC6 100%);
+    background-image:-webkit-gradient(linear, right top, right bottom, color-stop(0%,#E7DEC6), color-stop(50%,#8C836B),color-stop(100%,#E7DEC6));
+}
+html,body{
+    min-height: 98%;
+}

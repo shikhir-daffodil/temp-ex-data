@@ -1,0 +1,76 @@
+<% provide(:title, 'Questions') %>
+<script>
+  $(document).ready(function() {
+    $('#selectall').click(function(event) {  //on click
+      if (this.checked) { // check select status
+        $('.questions_check').each(function() { //loop through each checkbox
+          this.checked = true;  //select all checkboxes with class "checkbox1"              
+        });
+      } else {
+        $('.questions_check').each(function() { //loop through each checkbox
+          this.checked = false; //deselect all checkboxes with class "checkbox1"                      
+        });
+      }
+    });
+
+  });
+</script>
+<h1>Questions List</h1><%= flash[:notice]%>
+<div class="filter">
+  <%= form_tag url_for(:controller => 'admin', :action => 'viewquestions'), method: "get" do %>
+    Subject:<%= collection_select 'quetype', :sub, Subject.all, :subject, :subject, :prompt => true %>
+    Multi Choice:<%= select_tag 'multichoice', options_for_select(%w[No Yes]), {:include_blank => 'name of your blank prompt'} %>
+    Is Active:<%= select_tag 'isactive', options_for_select(%w[Active Inactive]), {:include_blank => 'name of your blank prompt'} %>
+    <%= submit_tag 'Apply' %>
+    <span class="link"><%= link_to 'CSV Opions', {:action => 'csv_actions'} %></span>
+  <% end %>
+</div>
+<%= form_tag url_for(:controller => 'admin', :action => 'del_mul_ques'), method: :delete do %>
+  <div class="divtable" >
+    <div class="table">
+      <div class="tr">
+        <div class="td"><%= submit_tag "", data: { confirm: "Are you sure you want to delete these?" }%><br>
+          <%= check_box_tag "selectall" %>
+        </div>
+        <div class="td">Question</div>
+        <div class="td">Type</div>
+        <div class="td">Is Multi Choice</div>
+        <div class="td">Is Active</div>
+        <div class="td">Options</div>
+        <div class="td">Answers</div>
+        <div class="td">Actions</div>
+      </div>
+      <% @questions.each do |question| %>
+        <div class="tr">
+          <div class="td">
+            <%= check_box_tag "questions[]", question.id, false, class: "questions_check" %>
+            </div>
+            <div class="td"><%= question.ques %></div>
+            <div class="td"><%= question.quetype %></div>
+            <div class="td"><%= question.multichoice %></div>
+            <div class="td"><%= question.isactive %></div>
+            <div class="td"><% question.question_options.each do |option| %>
+                <%= option.option %><br>
+              <% end %>
+            </div>
+            <div class="td">
+              <% question.question_options.each do |option| %>
+                <% question.answers.split(",").each do |ans| %>
+                  <% if option.id == ans.to_i %>
+                    <%= option.option %><br>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </div>
+            <div class="td">
+              <%= link_to(image_tag("icons/edit_icon.svg", :alt => "Edit", :title => "Edit"), {:action=>'editquestion', :question_id=>question.id}, method: :post) %> 
+              <%= link_to(image_tag("icons/bin_icon.png", :alt => "Delete", :title => "Delete"), {:action=>'deletequestion', :id=>question.id}, method: :delete, data: { confirm: "Are you sure you want to delete this question?" }) %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <div class="apple_pagination">
+    <%= will_paginate @questions %>
+  </div>

@@ -1,0 +1,72 @@
+<% provide(:title, 'Edit Question') %>
+<script>
+  $(document).ready(function() {
+    $("#delopt").css({"opacity": "0.3"});
+    var MaxInputs = 5; //maximum input boxes allowed
+    var x = $(".options_div input").length; //initlal options text box count 
+    $("#addopt").click(function(e)  //on add input button click
+    {
+      if (x < MaxInputs) //max input box allowed
+      {
+        x++; //text box increment
+        $(".options_div").append('<input id="options_5" type="text" name="options[5]">');
+        $("#delopt").css({"opacity": "1"});
+        $("#addopt").css({"opacity": "0.3"});
+      }
+    });
+    $("body").on("click", "#delopt", function(e) { //user click on remove text
+      if (x == 5) {
+        $($("#options_5")).remove(); //remove text box
+        x--; //decrement textbox
+        $("#addopt").css({"opacity": "1"});
+        $("#delopt").css({"opacity": "0.3"});
+      }
+    });
+  });
+</script>
+  <h1>Add Question</h1>
+<div class="forms">
+  <div class="forms_container">
+    <hr>
+    <%=  form_for @question, url: { action: "update" } do |q| %>
+      Question:<br> <%= q.text_area 'ques' %><br>
+      <div class="select_space">Subject:          <%= collection_select 'quetype', :sub, Subject.all, :subject, :subject, {:selected => @question.quetype} %></div>
+      <div class="select_space">Multi Choice: <%= q.select 'multichoice', options_for_select(%w[No Yes], @question.multichoice) %></div>
+      <div class="select_space">Is Active:        <%= q.select 'isactive', options_for_select(%w[Active Inactive], @question.isactive) %></div>
+      Options:
+      <%= image_tag("icons/add_icon.png", :alt => "Add Option", :title => "Add Option", :id =>"addopt") %>
+      <%= image_tag("icons/minus_icon.png", :alt => "Delete Option", :title => "Delete Option", :id =>"delopt") %>
+      <div class="options_div">
+        <% x=0 %>
+        <% @question.question_options.each do |option| %>
+          <% x=x+1 %>
+          <%= text_field_tag "options[o#{x}]", option.option %>
+        <% end %>
+      </div>
+      Answer(s):
+      <div class="smallmsg">*For MCQ answers should be comma(',') separated.</div>
+      <div class="spcng"><% answ = "" %>
+        <% @question.question_options.each do |option| %>
+          <% @question.answers.split(",").each do |ans| %>
+            <% if option.id == ans.to_i %>
+              <% answ = answ + "," + option.option %>
+            <% end %>
+          <% end %>
+        <% end %>
+        <% answ[0]="" %>
+        <%= text_field_tag 'answers', answ %>
+      </div>
+      <hr>
+      <%= q.submit 'Save Question' %>
+    <% end %>
+    <%= button_to "Cancel", action: "viewquestions", controller: "admin" %>
+  </div>
+</div>
+<ul class="errors">
+  <li><%= flash[:notice]%></li>
+  <% if @question.errors.any? %>
+    <% for message_error in @question.errors.full_messages %>
+      <li><%= message_error %></li>
+    <% end %>
+  <% end %>
+</ul>

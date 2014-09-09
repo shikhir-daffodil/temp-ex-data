@@ -1,0 +1,27 @@
+<% provide(:title, 'New user') %>
+<div class="forms">
+  <h1>Sign Up</h1>
+  <div class="forms_container">
+    <hr>
+
+    <%= form_for(:user, :url => {:controller => 'users', :action => 'create'}) do |f| %>
+      Name:<br> <%= f.text_field :name%>
+      Email:<br> <%= f.email_field :email%>
+      Phone No.:<br> <%= f.phone_field :phone%>
+      Experience(yrs):<br><%= f.number_field :experience, :min => "0"%> 
+      Password:<br> <%= f.password_field :password%>
+      Confirm Password:<br> <%= f.password_field :password_confirmation%>
+      <hr>
+      <%= f.submit 'Sign Up' %>
+    <% end %>
+  </div>
+  Already Signed Up<br>
+  <%= link_to( "Sign In", :controller => "users", :action => "login") %>
+  <% if @user.errors.any? %>
+  <ul class="errors">
+    <% for message_error in @user.errors.full_messages %>
+      <li><%= message_error %></li>
+    <% end %>
+  </ul>
+<% end %>
+</div>

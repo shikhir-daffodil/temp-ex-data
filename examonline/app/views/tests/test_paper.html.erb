@@ -1,0 +1,59 @@
+<% @sub = Test.find(session[:test_id]).subject.capitalize %>
+<% provide(:title, @sub+" Test") %>
+<h1><%= @sub %> Test</h1>
+<div id="timer"></div>
+<script>
+<% h = (session[:test_hour].to_i - Time.now.hour) * 3600 %>
+<% m = (session[:test_min].to_i - Time.now.strftime("%M").to_i) * 60 %>
+<% s = (session[:test_sec].to_i - Time.now.strftime("%S").to_i) %>
+  var count = <%= h + m + s + 2 %>;
+  var counter = setInterval(timer, 1000);
+
+  function timer() {
+    count = count - 1;
+    if (count == -1) {
+      clearInterval(counter);
+      return;
+    }
+
+    var seconds = count % 60;
+    var minutes = Math.floor(count / 60);
+    var hours = Math.floor(minutes / 60);
+    minutes %= 60;
+    hours %= 60;
+
+    document.getElementById("timer").innerHTML = "Time Left: " + hours + "." + minutes + "." + seconds;
+  }
+  a = count * 1000 + 300
+  setTimeout(function timeup() {
+    alert("Time's Up")
+    document.getElementById("answer_form").submit();
+  }, a);
+</script>
+<br>
+
+<%= form_tag url_for(:controller => 'tests', :action => 'result'), :method => 'post', id: "answer_form" do -%>
+  <div class="questionaire">
+    <% counter = 1 %>
+    <% @questions.each do |question| %>
+      <br><hr><div class="question">Q<%= counter %>. <%= question.ques %></div>
+      <div class="options">
+        <% if question.multichoice.to_s == "Yes" %>
+          <% question.question_options.sample(5).each do |option| %>
+            <%= check_box_tag "mcq[#{question.id}][]", option.id, false, class: "options_check" %>
+              <%= option.option %>
+            <% end %>
+          <% else %>
+            <% question.question_options.sample(5).each do |option| %>
+              <%= radio_button_tag "scq[#{question.id}]", option.id %>
+              <%= option.option %>
+            <% end %>
+          <% end %>
+        </div>
+        <% counter+=1 %>
+      <% end %>
+      <br>
+      <hr>
+      <%= submit_tag 'Submit Test' %>
+    </div>
+  <% end -%>

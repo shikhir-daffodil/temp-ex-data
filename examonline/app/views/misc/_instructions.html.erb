@@ -1,0 +1,9 @@
+<p class="note-head">Read the Instructions Carefully before proceeding</p>
+<ul class="note">
+  <li>Click the 'Submit Test' button given in the bottom of the test to Submit your answers.</li>
+  <li>Test will be submitted automatically if the time is expired.</li>
+  <li>Don't refresh the page.</li>
+  <li>Each question carry 1 mark, no negative marks.</li>
+  <li>Time alloted : <%= Test.find(session[:test_id]).duration %> minutes.</li>
+  <li>Total number of questions : <%= Test.find(session[:test_id]).quescount %>.</li>
+</ul>

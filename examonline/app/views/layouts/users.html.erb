@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head><%= favicon_link_tag 'examicon.png' %>
+    <title><%= full_title(yield(:title)) %></title>
+    <%= stylesheet_link_tag 'user_layout' %>
+    <%= javascript_include_tag 'user_layout' %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <div id="tester"></div>
+    <div id="wrapper">
+      <header>
+        <div class="header_container">
+          <div class="welcome_message">
+            Welcome!!
+          </div>
+          <div class="header_links">
+            <ul>
+              <li><%= link_to( "Profile",:controller => 'users', :action => 'profile') %></li>
+              <li><%= link_to( "Settings", '#') %></li>
+              <li><%= link_to( "Logout",:controller => 'users', :action => 'logout') %></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container">
+        <%= yield %>
+      </div>
+    </div>
+    <footer>
+      <div class="footer-container">
+        Footer
+      </div>
+    </footer>
+  </body>
+</html>

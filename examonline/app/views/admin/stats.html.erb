@@ -1,0 +1,38 @@
+<% provide(:title, 'Statistics') %>
+<h1>Test Statistics</h1>
+<% if @stats %>
+  <% @correct = 0 %>
+  <% @incorrect = 0 %>
+  <div class="divtable">
+    <div class="table">
+      <div class="tr">
+        <div class="td">Test Name</div>
+        <div class="td">Test Login ID</div>
+        <div class="td">Test Subject</div>
+        <div class="td">User Name</div>
+        <div class="td">Correct Answers</div>
+        <div class="td">Incorrect Answers</div>
+        <div class="td">Percentage</div>
+        <div class="td">Test Date</div>
+      </div>
+      <% @stats.each do |result| %>
+        <div class="tr">
+          <div class="td"><%= Test.find(result.test_id).testname %></div>
+          <div class="td"><%= Test.find(result.test_id).testlogin %></div>
+          <div class="td"><%= Test.find(result.test_id).subject %></div>
+          <div class="td"><%= User.find(result.user_id).name %></div>
+          <div class="td"><% @correct += result.correct %><%= result.correct %></div>
+          <div class="td"><% @incorrect += result.incorrect %><%= result.incorrect %></div>
+          <div class="td"><%= @percent = (result.correct * 100)/(result.correct + result.incorrect) %>&percnt;</div>
+          <div class="td"><%= result.created_at.strftime("%b %d, %Y") %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="apple_pagination">
+    <%= will_paginate @stats %>
+  </div>
+  <div class="average">Average Score is: <%= (@correct *100)/(@correct + @incorrect) %>&percnt;</div>
+<% else %>
+  <div class="average">No result to display</div>
+<% end %>

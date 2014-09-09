@@ -1,0 +1,27 @@
+<% provide(:title, 'New Test') %>
+  <h1>Add New Test</h1>
+<div class="forms">
+  <div class="smallmsg">Note: All questions will be picked randomly</div>
+  <div class="forms_container">
+    <hr>
+    <%= form_for @test, :url => {:controller => 'admin', :action => 'addtest'} do |t| %>
+      <div class="select_space">Subject:          <%= t.collection_select :subject, Subject.all, :subject, :subject %></div>
+      Test Duration(minutes):<br><%= t.number_field :duration, :min => "0" %>
+      Maximum Question Count:<br><%= t.number_field :quescount, :min => "0" %>
+      <div class="select_space">Is Active:        <%= t.select :isactive, options_for_select(%w[Active Inactive]) %></div>
+      Test Name:<br><%= t.text_field :testname %>
+      Test Login ID:<br><%= t.text_field :testlogin %>
+      Password:<br><%= t.password_field :testpass %>
+      <hr>
+      <%= t.submit :Create %>
+    <% end %>
+  </div>
+</div>
+<ul class="errors">
+  <li><%= flash[:notice] %></li>
+  <% if @test.errors.any? %>
+    <% for message_error in @test.errors.full_messages %>
+      <li><%= message_error %></li>
+    <% end %>
+  <% end %>
+</ul>

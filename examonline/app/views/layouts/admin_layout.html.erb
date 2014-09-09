@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head><%= favicon_link_tag 'examicon.png' %>
+    <title><%= full_title(yield(:title)) %></title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <%= stylesheet_link_tag 'admin_layout', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'classie' %>
+    <%= csrf_meta_tags %>  
+    <%= stylesheet_link_tag 'component' %>    
+  </head>
+  <body>
+    <div id="wrapper">
+      <header>
+        <div class="header_container">
+          <div class="welcome_message">
+            Welcome Administrator!!
+          </div>
+          <div class="header_links">
+            <ul>
+              <li><%= link_to( "Home", :controller => 'admin', :action => 'home') %></li>
+              <li><%= link_to( "Profile", '#') %></li>
+              <li><%= link_to( "Settings",:controller => 'admin', :action => 'settings') %></li>
+              <li><%= link_to( "Logout",:controller => 'users', :action => 'logout') %></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="cbp-spmenu-push">
+        <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-spmenu-s1">
+          <h3>Users</h3>
+          <%= link_to( "Add User", :controller => 'users', :action => 'adduser') %>
+          <%= link_to( "View Users", :controller => 'admin', :action => 'view') %>
+          <h3>Questions</h3>
+          <%= link_to( "Add Questions",:controller => 'admin', :action => 'newques') %>
+          <%= link_to( "View Questions", :controller => 'admin', :action => 'viewquestions') %>
+          <h3>Tests</h3>
+          <%= link_to( "Add Test", :controller => 'admin', :action => 'newtest') %>
+          <%= link_to( "View Tests", :controller => 'admin', :action => 'viewtest') %>
+          <h3>Statistics</h3>
+          <%= link_to( "Statistics", :controller => 'admin', :action => 'stats') %>
+        </nav>
+      </div>     
+      <div class="container"> 
+        <div class="main">
+          <section>
+            <button id="showLeft">Menu</button>
+          </section>
+          <%= yield %>
+        </div>
+      </div>
+      <div class="push"></div>
+    </div>
+    <footer>
+      <div class="footer-container">
+        Footer
+      </div>
+    </footer>
+    <script>
+      var menuLeft = document.getElementById('cbp-spmenu-s1'),
+              body = document.body;
+      showLeft.onclick = function() {
+        classie.toggle(this, 'active');
+        classie.toggle(menuLeft, 'cbp-spmenu-open');
+        disableOther('showLeft');
+      };
+    </script>
+  </body>
+</html>

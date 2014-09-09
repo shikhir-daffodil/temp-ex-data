@@ -1,0 +1,42 @@
+<% provide(:title, 'Home') %>
+
+<h1>Welcome <%= User.find(session[:user_id]).name %></h1>
+<% if !@results.empty? %>
+  <div class="tablediv">
+    <div class="table">
+      <div class="th">
+        <div class="td">Test Name</div>
+        <div class="td">Correct Answers</div>
+        <div class="td">Incorrect Answers</div>
+        <div class="td">Percentage</div>
+        <div class="td">Test Date</div>
+      </div>
+      <% @results.each do |result| %>
+        <div class="tr">
+          <div class="td"><%= Test.find(result.test_id).subject %></div>
+          <div class="td"><%= result.correct %></div>
+          <div class="td"><%= result.incorrect %></div>
+          <div class="td"><%= @percent = (result.correct * 100)/(result.correct + result.incorrect) %>&percnt;</div>
+          <div class="td"><%= result.created_at.strftime("%b %d, %Y") %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="apple_pagination">
+    <%= will_paginate @results %>
+  </div>
+  <div class="average">Your Average Score is: <%= @avg %>&percnt;</div>
+<% else %>
+  <div class="average">No result to display</div>
+<% end %>
+<% puts @results %>
+<% if User.find(session[:user_id]).activity.to_s == 'Active' %>
+  <% if session[:test_id] && session[:test_id] != "" %>
+    <div class="message">Your Test Id is <%= Test.find(session[:test_id]).testlogin %></div>
+    <%= link_to( "Start Test", :controller => "tests", :action => "instructions") %> | <%= link_to( "Change Test", :controller => "tests", :action => "home")%>
+  <% else %>
+    <%= link_to( "New Test", :controller => "tests", :action => "home")%>
+  <% end %>
+<% else %>
+  <div class="message">Your account is not active please contact Administrator for Activation.</div>
+<% end %>

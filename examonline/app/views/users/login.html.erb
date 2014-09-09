@@ -1,0 +1,22 @@
+<% provide(:title, 'Log In') %>
+<div class= "forms">
+  <h1>Log In</h1>
+  <div class="forms_container"> 
+    <hr>
+    <%= form_tag(:controller => 'users', :action => 'login_attempt') do %>
+      <p>Email:<br> <%= email_field_tag(:email) %></p>
+      <p>Password:<br> <%= password_field_tag :login_password %></p>
+      <hr>    
+      <%= submit_tag("Log In") %>
+    <% end %>
+  </div>
+  Forgot Password?<%= link_to( "Click here", :controller => "users", :action => "forgot") %> to reset.<br>
+  <% if !session[:test_id] %>
+    Give test now <%= link_to( "Click here", :controller => "tests", :action => "home") %>.
+  <% else %>
+    For first time <%= link_to( "Click here", :controller => "tests", :action => "home") %> to register.
+  <% end %>
+  <br><br>
+  <%= flash[:notice] %><br>
+  <%= flash[:note] %>
+</div>

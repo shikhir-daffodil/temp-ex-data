@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  subject: MyString
+  assignee: MyString
+  isactive: MyString
+  testlogin: MyString
+  testpass: MyString
+
+two:
+  subject: MyString
+  assignee: MyString
+  isactive: MyString
+  testlogin: MyString
+  testpass: MyString

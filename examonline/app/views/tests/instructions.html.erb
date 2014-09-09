@@ -1,0 +1,33 @@
+<% provide(:title, 'Instructions') %>
+<div id="timer"></div>
+<script>
+  var minutes = 2
+  var seconds = 1
+  function display() {
+    if (seconds <= 0) {
+      seconds = 59
+      minutes -= 1
+    }
+    if (minutes <= -1) {
+      seconds = 0
+      minutes += 1
+    }
+    else
+      seconds -= 1
+    document.getElementById("timer").innerHTML ="Test auto start in: "+ minutes + "." + seconds
+    setTimeout("display()", 1000)
+  }
+  display()
+  var a = minutes * 60000 + seconds * 1000 + 100
+  setTimeout(function timeup() {
+    document.getElementById("test_form").submit();
+  }, a);
+</script>
+<h1></h1>
+<br>
+<%= session[:test_time] %>
+<%= render "misc/instructions" %><br>
+<%= form_tag url_for(:controller => 'tests', :action => 'test_paper'), id: "test_form" do -%>
+<%= submit_tag 'Start Test' %>
+<% end %>
+<%= link_to( "Back", :controller => "users", :action => "home")%>

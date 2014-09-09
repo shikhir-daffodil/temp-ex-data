@@ -1,0 +1,7 @@
+<h1>Your Result</h1>
+<div class="result">
+  Correct Answers: <span class="correct"><%= @correct %></span><br>
+  Incorrect Answers: <span class="incorrect"><%= @incorrect %></span><br>
+  Total Questions: <span class="total"><%= @count %></span>
+</div>
+<%= link_to( "Done", :controller => "tests", :action => "finish_test")%>

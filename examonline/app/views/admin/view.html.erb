@@ -1,0 +1,69 @@
+<% provide(:title, 'Users') %>
+<script>
+  $(document).ready(function() {
+    $('#selectall').click(function(event) {  //on click
+      if (this.checked) { // check select status
+        $('.users_check').each(function() { //loop through each checkbox
+          this.checked = true;  //select all checkboxes with class "checkbox1"              
+        });
+      } else {
+        $('.users_check').each(function() { //loop through each checkbox
+          this.checked = false; //deselect all checkboxes with class "checkbox1"                      
+        });
+      }
+    });
+
+  });
+</script>
+<h1>Users List</h1><%= flash[:notice]%>
+<div class="filter">
+  <%= form_tag url_for(:controller => 'admin', :action => 'view'), method: "get" do %>
+    Name:<%= text_field_tag 'name' %>Email:<%= text_field_tag 'email' %>
+    Experience:<span><%= select_tag 'exp', options_for_select(['>', '<', '=']) %><%= text_field_tag 'expval' %></span>
+    Phone:<%= text_field_tag 'phone' %>
+    User Type:<%= select_tag 'usertype', options_for_select(['Admin', 'Examiner', 'Examinee']), {:include_blank => 'name of your blank prompt'} %>
+    <%= submit_tag 'Apply' %>
+  <% end %>
+</div>
+<%= form_tag destroy_multiple_users_path, method: :delete do %>
+  <div class="divtable" >
+    <div class="table">
+      <div class="tr">
+        <div class="td"><%= submit_tag "", data: { confirm: "Are you sure you want to delete these?" }%><br>
+          <%= check_box_tag "selectall" %>
+        </div>
+        <div class="td">Name</div>
+        <div class="td">Email</div>
+        <div class="td">Experience</div>
+        <div class="td">Phone</div>
+        <div class="td">User Type</div>
+        <div class="td">Action</div>
+      </div>
+      <% @users.each do |users| %>
+        <div class="tr">
+          <div class="td">
+            <% if session[:user_id] != users.id %>
+              <%= check_box_tag "users[]", users.id, false, class: "users_check" %>
+              <% end %>
+            </div>
+            <div class="td"><%= users.name %></div>
+            <div class="td"><%= users.email %></div>
+            <div class="td"><%= users.experience %> Years</div>
+            <div class="td"><%= users.phone %></div>
+            <div class="td"><%= users.usertype %></div>
+            <div class="td">
+              <% if users.usertype != 'Admin' %>
+                <%= link_to(image_tag("icons/edit_icon.svg", :alt => "Edit", :title => "Edit"), {:controller=>'users', :action=>'edituser', :user_id=>users.id}, method: :post) %> 
+              <% end %>
+              <% if session[:user_id] != users.id %>
+                <%= link_to image_tag("icons/bin_icon.png", :alt => "Delete", :title => "Delete"), {:action=>'destroyuser', :id=>users.id}, method: :delete, data: { confirm: "Are you sure you want to delete #{users.usertype} #{users.name}?" } %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <div class="apple_pagination">
+    <%= will_paginate @users %>
+  </div>

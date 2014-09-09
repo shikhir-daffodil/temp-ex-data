@@ -1,0 +1,21 @@
+<% provide(:title, 'Test Log In') %>
+<div class= "forms">
+  <h1>Test Log In</h1>
+  <div class="forms_container"> 
+    <hr>
+    <%= form_tag(:controller => 'tests', :action => 'test_login') do %>
+      <p>Test Login ID:<br> <%= text_field_tag :testlogin %></p>
+      <p>Test Password:<br> <%= password_field_tag :testpass %></p>
+      <hr>    
+      <%= submit_tag("Log In") %>
+    <% end %>
+  </div>
+  <% if session[:user_id] %>
+    <%= link_to( "Back", :controller => "users", :action => "home") %>
+  <% else %>
+    Don't wish to give test? 
+    <%= link_to( "Login", :controller => "users", :action => "login") %>
+  <% end %><br>
+  <%= flash[:notice]%>
+
+</div>

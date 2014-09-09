@@ -1,0 +1,80 @@
+.cbp-spmenu {
+    background: #8C836B;
+    position: fixed;
+}
+.cbp-spmenu h3 {
+    color: #E7DEC6;
+    font-size: 1.9em;
+    padding: 2%;
+    margin: 0;
+    font-weight: 300;
+    background: #645F4F;
+}
+.cbp-spmenu a {
+    display: block;
+    color: #fff;
+    font-size: 1.1em;
+    font-weight: 300;
+}
+.cbp-spmenu a:hover {
+    background: #A58AAd;
+}
+.cbp-spmenu a:active {
+    background: #afdefa;
+    color: #47a3da;
+}
+.cbp-spmenu-vertical {
+    width: 240px;
+    height: 100%;
+    top: 0;
+    z-index: 1000;
+}
+.cbp-spmenu-vertical a {
+    border-bottom: 1px solid #9ec58e;	
+    padding: 5%;
+}
+
+.cbp-spmenu-left {
+    left: -240px;
+}
+.cbp-spmenu-left.cbp-spmenu-open {
+    left: 0px;
+}
+.cbp-spmenu{
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+@media screen and (max-height: 26.375em){
+    .cbp-spmenu-left{
+        left: -190px;
+    }
+}
+body {
+    font-family: Calibri, Arial, sans-serif;
+}
+a {
+    text-decoration: none;
+}
+.main section {
+    max-width: 100px;
+    margin: -12px 0 0 252px;
+    position: absolute;
+}
+.main section button {
+    border: none;
+    background: #948355;
+    color: #fff;
+    padding: 1em;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    margin: 10px 0;
+    font-size: 0.8em;
+}
+.main section button:hover {
+    background: #887B59;
+}
+.main section button.active {
+    background: #5C5238;
+}

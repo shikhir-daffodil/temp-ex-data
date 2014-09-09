@@ -1,0 +1,14 @@
+<% provide(:title, 'Forgot Password') %>
+<div class="forms">
+  <h1>Reset Password</h1>
+  <div class="forms_container">
+    <hr>
+    <%= form_tag url_for(:controller => 'users', :action => 'reset_pass') do %>
+      Email:<br> <%= email_field_tag :email%><%= submit_tag 'Reset Password' %>
+    <% end %>
+  </div>
+  <span class="errors">  
+    <%= flash[:notice] %>
+  </span><br>
+<%= link_to( "Cancel",:controller => 'users', :action => 'login') %>
+</div>

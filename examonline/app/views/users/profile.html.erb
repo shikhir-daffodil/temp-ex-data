@@ -1,0 +1,26 @@
+<% provide(:title, 'Profile') %>
+<h1>Your Details</h1>
+<% @cuser.each do |cuser| %>
+  <ul class="table">
+    <div class="row">
+      <li>Name:</li>
+      <li><%= cuser.name %></li>
+    </div>
+    <div class="row">
+      <li>Email:</li>
+      <li><%= cuser.email %></li>
+    </div>
+    <div class="row">
+      <li>Experience:</li>
+      <li><%= cuser.experience %> Years</li>
+    </div>
+    <div class="row">
+      <li>Phone:</li>
+      <li><%= cuser.phone %></li>
+    </div>
+    <div class="row">
+      <li><%= link_to( "Back", :controller => "users", :action => "home") %></li>
+      <li><%= link_to( "Edit", :controller => "users", :action => "edit") %></li>
+    </div>
+  </ul>
+<% end %>

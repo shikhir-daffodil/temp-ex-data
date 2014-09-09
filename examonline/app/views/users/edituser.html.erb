@@ -1,0 +1,27 @@
+<% provide(:title, 'Edit Details') %>
+<h1>Edit Details</h1>
+<div class="forms">
+  <div class="forms_container">
+    <br>
+    <%= form_for(:user, :url => {:controller => 'users', :action => 'tryedit'}) do |f| %>
+      Name:<br> <%= f.text_field :name%>
+      Email:<br> <%= f.email_field :email%>
+      Phone No.:<br> <%= f.phone_field :phone%>
+      Experience(yrs):<br><%= f.number_field :experience, :min => "0" %>
+      User Type: <%= f.select :usertype, options_for_select(%w[Examinee Examiner Admin]) %>
+      Activity:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <%= f.select :activity, options_for_select(%w[Active Inactive]) %><br>
+      <div class="smallmsg">*Password will not be changed by default.</div>
+      <%= link_to( "Reset Password",:controller => 'users', :action => 'reset_pass') %>
+      <hr>
+      <%= f.submit 'Save User' %>
+    <% end %><%= button_to "Cancel", action: "view", controller: "admin" %>
+  </div>
+</div>
+<ul class="errors">
+  <li><%= flash[:notice]%></li>
+  <% if @user.errors.any? %>
+    <% for message_error in @user.errors.full_messages %>
+      <li><%= message_error %></li>
+    <% end %>
+  <% end %>
+</ul>

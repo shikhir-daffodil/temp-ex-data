@@ -1,0 +1,27 @@
+<% provide(:title, 'Add user') %>
+  <h1>Add New User</h1>
+<div class="forms">
+  <div class="forms_container">
+    <br>
+    <%= form_for :user, :url => {:controller => 'users', :action => 'addnew'} do |f| %>
+      Name:<br> <%= f.text_field :name%>
+      Email:<br> <%= f.email_field :email%>
+      Phone No.:<br> <%= f.phone_field :phone%>
+      Experience(yrs):<br><%= f.number_field :experience, :min => "0"%>
+      User Type: <%= f.select :usertype, options_for_select(%w[Examinee Examiner Admin]) %>      
+      Activity:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <%= f.select :activity, options_for_select(%w[Active Inactive]) %><br>
+      <div class="smallmsg">*Password will be generated randomly and will be sent to the email provided.</div>
+      <hr>
+<%= f.submit 'Create' %><%= f.submit 'Create and continue' %>
+    <% end %>
+  </div>
+</div>
+
+  <% if @user.errors.any? %>
+    <ul class="errors">
+      <%= flash[:notice]%>
+      <% for message_error in @user.errors.full_messages %>
+        <li><%= message_error %></li>
+      <% end %>
+    </ul>
+  <% end %>
