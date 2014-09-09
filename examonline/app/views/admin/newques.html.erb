@@ -27,7 +27,7 @@
   <h1>Add Question</h1>
 <div class="forms">
   <div class="forms_container">
-    <hr>
+    <br>
     <%= form_tag url_for(:controller => 'admin', :action => 'addques'), :method => 'post' do -%>
       Question:<br> <%= text_area_tag 'ques' %><br>
       <div class="select_space">Subject:          <%= collection_select 'quetype', :sub, Subject.all, :subject, :subject %></div>

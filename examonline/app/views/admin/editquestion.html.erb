@@ -26,8 +26,8 @@
 </script>
   <h1>Add Question</h1>
 <div class="forms">
-  <div class="forms_container">
-    <hr>
+  <div class="forms_container">    
+    <br>
     <%=  form_for @question, url: { action: "update" } do |q| %>
       Question:<br> <%= q.text_area 'ques' %><br>
       <div class="select_space">Subject:          <%= collection_select 'quetype', :sub, Subject.all, :subject, :subject, {:selected => @question.quetype} %></div>

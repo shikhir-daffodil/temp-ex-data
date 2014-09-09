@@ -116,9 +116,19 @@ class AdminController < ApplicationController
       reset_session
       flash[:notice] = "You were successfully logged out"
       redirect_to(:controller => 'users', :action => 'login')
-    else      
-      @questions = Question.all.paginate(:page => params[:page], :per_page => 5)
+    else
+      if params[:commit] == "Apply"
+        @filteredquestions = questionfilter(params[:quetype][:sub], params[:multichoice], params[:isactive])
+        @questions = @filteredquestions.paginate(:page => params[:page], :per_page => 5)
+      else
+        @questions = Question.all.paginate(:page => params[:page], :per_page => 5)
+      end
     end
+  end
+  
+  def questionfilter(subject, multi, isactive)
+    @question = Question.all.where("quetype LIKE (?)", "#{subject}%").where("multichoice LIKE (?)", "#{multi}%").where("isactive LIKE (?)", "#{isactive}%")
+    return @question
   end
   
   def deletequestion
@@ -236,9 +246,33 @@ class AdminController < ApplicationController
       reset_session
       flash[:notice] = "You were successfully logged out"
       redirect_to(:controller => 'users', :action => 'login')
-    else      
-      @tests = Test.all.paginate(:page => params[:page], :per_page => 5)
+    else
+      if params[:commit] == "Apply"
+        @filteredtests = testfilter(params[:quetype][:sub], params[:time], params[:timeval], params[:qnum], params[:qnumval], params[:isactive], params[:createdby])
+        @tests = @filteredtests.paginate(:page => params[:page], :per_page => 5)
+      else
+        @tests = Test.all.paginate(:page => params[:page], :per_page => 5)
+      end
     end    
+  end
+  
+  def testfilter(subject, time, timeval, qnum, qnumval, isactive, createdby)
+    if timeval.blank?
+      timeval = 0
+    end
+    if qnumval.blank?
+      qnumval = 0
+    end
+    @tests = Test.all.where("subject LIKE (?)", "#{subject}%").where("isactive LIKE (?)", "#{isactive}%").where("duration #{time}#{timeval}").where("quescount #{qnum}#{qnumval}")
+    if !createdby.blank?
+      creatorid = User.where("name LIKE (?)", "%#{createdby}%").take
+      if creatorid        
+        @tests = @tests.where("createdby = #{creatorid.id}")
+      else
+        @tests = @tests.where("id = 0")
+      end
+    end
+    return @tests
   end
   
   def destroy_multipletest

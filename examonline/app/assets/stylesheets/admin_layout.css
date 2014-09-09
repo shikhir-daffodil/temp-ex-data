@@ -303,9 +303,10 @@ html,body{
     width: 100px;
 }
 .filter{
-    width: 950px;
+    width: 970px;
     font-size: 12px;
     margin: auto;
+    padding: 0 -10px 0 -10px;
 }
 .filter input{
     width: 80px;

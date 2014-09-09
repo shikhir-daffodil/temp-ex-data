@@ -1,17 +1,27 @@
 <% provide(:title, 'Statistics') %>
 <h1>Test Statistics</h1>
 <% if @stats %>
-  <% @correct = 0 %>
-  <% @incorrect = 0 %>
+  <div class="filter">
+    <%= form_tag url_for(:controller => 'admin', :action => 'stats'), method: "get" do %>
+      Test ID:<%= text_field_tag 'testid', params[:testid] %>
+      Subject:<%= collection_select 'subject', :sub, Subject.all, :subject, :subject, :prompt => true %>
+      User:<%= text_field_tag 'user', params[:user] %>
+      Questions:<span><%= select_tag 'qnum', options_for_select(['>', '<', '='], params[:qnum]) %><%= number_field_tag 'qnumval', params[:qnumval] %></span>
+      Percentage:<span><%= select_tag 'percent', options_for_select(['>', '<', '='], params[:percent]) %><%= number_field_tag 'percentval', params[:percentval] %></span>
+      <br>Date:<span><%= date_select("teston", "teston", order: [:day, :month, :year]) %></span>
+      <%= submit_tag 'Apply' %>
+    <% end %>
+  </div>
   <div class="divtable">
     <div class="table">
       <div class="tr">
         <div class="td">Test Name</div>
         <div class="td">Test Login ID</div>
-        <div class="td">Test Subject</div>
+        <div class="td">Test Subject</div>    
         <div class="td">User Name</div>
         <div class="td">Correct Answers</div>
         <div class="td">Incorrect Answers</div>
+        <div class="td">Total Questions</div>
         <div class="td">Percentage</div>
         <div class="td">Test Date</div>
       </div>
@@ -21,8 +31,9 @@
           <div class="td"><%= Test.find(result.test_id).testlogin %></div>
           <div class="td"><%= Test.find(result.test_id).subject %></div>
           <div class="td"><%= User.find(result.user_id).name %></div>
-          <div class="td"><% @correct += result.correct %><%= result.correct %></div>
-          <div class="td"><% @incorrect += result.incorrect %><%= result.incorrect %></div>
+          <div class="td"><%= result.correct %></div>
+          <div class="td"><%= result.incorrect %></div>
+          <div class="td"><%= Test.find(result.test_id).quescount %></div>
           <div class="td"><%= @percent = (result.correct * 100)/(result.correct + result.incorrect) %>&percnt;</div>
           <div class="td"><%= result.created_at.strftime("%b %d, %Y") %></div>
         </div>
@@ -32,7 +43,7 @@
   <div class="apple_pagination">
     <%= will_paginate @stats %>
   </div>
-  <div class="average">Average Score is: <%= (@correct *100)/(@correct + @incorrect) %>&percnt;</div>
+  <div class="average">Average Score is: 100&percnt;</div>
 <% else %>
   <div class="average">No result to display</div>
 <% end %>

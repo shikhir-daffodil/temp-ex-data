@@ -3,7 +3,7 @@
 <div class="forms">
   <div class="smallmsg">Note: All questions will be picked randomly</div>
   <div class="forms_container">
-    <hr>
+    <br>
     <%= form_for @test, :url => {:controller => 'admin', :action => 'addtest'} do |t| %>
       <div class="select_space">Subject:          <%= t.collection_select :subject, Subject.all, :subject, :subject %></div>
       Test Duration(minutes):<br><%= t.number_field :duration, :min => "0" %>

@@ -17,12 +17,12 @@
 </script>
 <h1>Tests List</h1><%= flash[:notice]%>
 <div class="filter">
-  <%= form_tag url_for(:controller => 'admin', :action => 'viewquestions'), method: "get" do %>
+  <%= form_tag url_for(:controller => 'admin', :action => 'viewtest'), method: "get" do %>
     Subject:<%= collection_select 'quetype', :sub, Subject.all, :subject, :subject, :prompt => true %>
-    Duration:<span><%= select_tag 'time', options_for_select(['<', '>', '=']) %><%= number_field_tag 'timeval' %></span>
-    Questions:<span><%= select_tag 'qnum', options_for_select(['<', '>', '=']) %><%= number_field_tag 'qnumval' %></span>
-    Is Active:<%= select_tag 'isactive', options_for_select(%w[Active Inactive]), {:include_blank => 'name of your blank prompt'} %>
-    Created By:<%= text_field_tag 'createdby' %>
+    Duration:<span><%= select_tag 'time', options_for_select(['>', '<', '=']) %><%= number_field_tag 'timeval', params[:timeval] %></span>
+    Questions:<span><%= select_tag 'qnum', options_for_select(['>', '<', '=']) %><%= number_field_tag 'qnumval', params[:qnumval] %></span>
+    Is Active:<%= select_tag 'isactive', options_for_select(%w[Active Inactive], params[:isactive]), {:include_blank => ''} %>
+    Created By:<%= text_field_tag 'createdby', params[:createdby] %>
     <%= submit_tag 'Apply' %>
   <% end %>
 </div>
