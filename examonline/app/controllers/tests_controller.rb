@@ -61,6 +61,7 @@ class TestsController < ApplicationController
       @result.correct = @correct
       @result.incorrect = @incorrect
       @result.test_time = @test_time
+      @result.subject = Test.find(session[:test_id]).subject
       @result.save
     end
   end

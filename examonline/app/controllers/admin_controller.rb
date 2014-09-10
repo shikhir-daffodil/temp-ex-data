@@ -176,7 +176,6 @@ class AdminController < ApplicationController
       len = var_opt.length
       var = 0
       @options.each do |opt|
-        puts var_opt[var]
         if !var_opt[var].blank?
           if var < len
             @option = QuestionOption.find(opt.id)
@@ -288,7 +287,51 @@ class AdminController < ApplicationController
   end
   
   def stats
-    @stats = Result.all.paginate(:page => params[:page], :per_page => 10)
+    if !session[:user_id]
+      flash[:notice] = "You Need to Log In First"
+      redirect_to(:action => 'login', :controller=>'users')
+    elsif !(User.find(session[:user_id]).usertype == 'Admin')
+      reset_session
+      flash[:notice] = "You were successfully logged out"
+      redirect_to(:controller => 'users', :action => 'login')
+    else
+      if params[:commit] == "Apply"
+        event = params[:dateval]
+        dateval = Date.new event["on(1i)"].to_i, event["on(2i)"].to_i, event["on(3i)"].to_i
+        @filteredstats = statfilter(params[:testid], params[:subject][:sub], params[:user],params[:qnum], params[:qnumval], params[:percent], params[:percentval], params[:date], dateval)
+        @stats = @filteredstats.paginate(:page => params[:page], :per_page => 10)
+      else
+        @stats = Result.all.paginate(:page => params[:page], :per_page => 10)
+      end
+    end
+  end
+  
+  def statfilter(testid, subject, user, qnum, qnumval, percent, percentval, date, dateval)
+    if percentval.blank?
+      percentval = -1
+    end
+    if qnumval.blank?
+      qnumval = 0
+    end
+    @results = Result.all.where("subject LIKE (?)", "#{subject}%").where("(correct+incorrect) #{qnum}#{qnumval}").where("((correct * 100)/(correct+incorrect)) #{percent}#{percentval}").where("created_at #{date} ?", dateval)
+    
+    if !testid.blank?
+      test_id = Test.where("testlogin LIKE (?)", "%#{testid}%").take
+      if test_id        
+        @results = @results.where("test_id = #{test_id.id}")
+      else
+        @results = @results.where("id = 0")
+      end
+    end
+    if !user.blank?
+      user_id = User.where("name LIKE (?)", "%#{user}%").take
+      if user_id      
+        @results = @results.where("user_id = #{user_id.id}")
+      else
+        @results = @results.where("id = 0")
+      end
+    end
+    return @results
   end
   
   def csv_actions

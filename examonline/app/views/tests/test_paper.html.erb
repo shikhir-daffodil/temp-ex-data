@@ -1,7 +1,8 @@
 <% @sub = Test.find(session[:test_id]).subject.capitalize %>
 <% provide(:title, @sub+" Test") %>
 <h1><%= @sub %> Test</h1>
-<div id="timer"></div>
+<div id="sticker" class="stick"><div id="timer"></div></div>
+<div class="clear"></div>
 <script>
 <% h = (session[:test_hour].to_i - Time.now.hour) * 3600 %>
 <% m = (session[:test_min].to_i - Time.now.strftime("%M").to_i) * 60 %>
@@ -36,24 +37,28 @@
   <div class="questionaire">
     <% counter = 1 %>
     <% @questions.each do |question| %>
-      <br><hr><div class="question">Q<%= counter %>. <%= question.ques %></div>
-      <div class="options">
-        <% if question.multichoice.to_s == "Yes" %>
-          <% question.question_options.sample(5).each do |option| %>
-            <%= check_box_tag "mcq[#{question.id}][]", option.id, false, class: "options_check" %>
-              <%= option.option %>
-            <% end %>
-          <% else %>
+      <div class="question-container">
+        <span class="question">Q<%= counter %>. <%= question.ques %></span>
+        <span class="options">
+          <% if question.multichoice.to_s == "Yes" %>
             <% question.question_options.sample(5).each do |option| %>
-              <%= radio_button_tag "scq[#{question.id}]", option.id %>
-              <%= option.option %>
+              <%= check_box_tag "mcq[#{question.id}][]", option.id, false, class: "options_check" %>
+                <%= option.option %>
+                <br>
+              <% end %>
+            <% else %>
+              <% question.question_options.sample(5).each do |option| %>
+                <%= radio_button_tag "scq[#{question.id}]", option.id %>
+                <%= option.option %>
+                <br>
+              <% end %>
             <% end %>
-          <% end %>
+          </span>
         </div>
+
         <% counter+=1 %>
       <% end %>
       <br>
-      <hr>
       <%= submit_tag 'Submit Test' %>
     </div>
   <% end -%>

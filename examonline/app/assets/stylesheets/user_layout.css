@@ -162,49 +162,6 @@ html,body{
 .note li{
     padding-bottom: 5px; 
 }
-
-.question{
-    background: #1b2165;
-    color: #dbdbad;
-    width: 460px;
-    padding: 10px 20px;
-}
-.questionaire{
-    width: 500px;
-    text-align: left;
-    margin: auto;
-}
-.questionaire hr{
-    width: 400px;
-    margin-bottom: 25px;
-}
-.options{
-    background: #cdc6fd;
-    color: #A62056;
-    width: 480px;
-    padding: 10px;
-}
-.options input{
-    margin-left: 20px;
-}
-.questionaire input[type=submit]{
-    width: 500px;
-    margin: 0 0 30px 0;
-    height: 35px;
-    color: #A62056;
-}
-#timer{
-    font-size: 15px;
-    color: #8C83C6;
-}
-.result{
-    color: #a49f35;
-    letter-spacing: 2px;
-    text-align: left;
-    max-width: 221px;
-    margin: auto;
-    line-height: 30px;
-}
 .correct{
     color: #3f703b;
 }
@@ -276,3 +233,62 @@ html,body{
     color: brown; }
 .apple_pagination a:hover, .apple_pagination a:focus {
     text-decoration: underline; }
+.question{
+    color: #262058;
+    width: 240px;
+    padding: 10px 5px;
+    float: left;
+    font-size: 12px;
+}
+.questionaire{
+    width: 500px;
+    text-align: left;
+    margin: auto;
+    padding-left: 20px;
+}
+.question-container{
+    min-height: 160px;
+    border-bottom: 1px black dashed;
+}
+.options{
+    color: #6a464f;
+    width: 240px;
+    padding: 5px;
+    float: right;
+    font-size: 12px;
+}
+.options input{
+    margin-left: 20px;
+}
+.questionaire input[type=submit]{
+    width: 500px;
+    margin: 0 0 30px 0;
+    height: 35px;
+    color: #A62056;
+}
+.result{
+    color: #a49f35;
+    letter-spacing: 2px;
+    text-align: left;
+    max-width: 221px;
+    margin: auto;
+    line-height: 30px;
+}
+.clear{
+    clear: both;
+}
+div#sticker {
+    padding:10px;
+    margin:77px 0;
+    background:#edeed5;
+    width:180px;
+    min-height: 24px;
+}
+.stick {
+    position:fixed;
+    top:0px;
+}
+#timer{
+    font-size: 18px;
+    color: #000;
+}
