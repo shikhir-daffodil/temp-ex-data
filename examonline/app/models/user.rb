@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   attr_accessor :password
-  validates :name, :presence => true, :uniqueness => true, :length => { :in => 4..50 }
+  validates :name, :presence => true, :uniqueness => true, :length => { :in => 3..50 }
   validates :email, :presence => true, :uniqueness => { case_sensitive: false }, on: :tryedit
   validates :email, :presence => true, :uniqueness => { case_sensitive: false }
   validates :phone, format: { with: /\d[0-9]\)*\z/, message: "Number Invalid" }, :length => { :in => 4..10 }

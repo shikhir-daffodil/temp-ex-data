@@ -1,8 +1,8 @@
 <% provide(:title, 'Edit Details') %>
-  <h1>Edit Details</h1>
+<h1>Edit Details</h1>
 <div class="forms">
   <div class="forms_container">
-    <hr>
+    <br>
 
     <%= form_for(:user, :url => {:controller => 'users', :action => 'tryedit', :id=>session[:user_id]}) do |f| %>
       Name:<br> <%= f.text_field :name%>
@@ -15,11 +15,11 @@
     <% end %><%= button_to "Cancel", action: "profile" %>
   </div>
 </div>
-<% if @user.errors.any? %>
-  <ul class="errors">
+<ul class="errors">
+  <% if @user.errors.any? %>
     <% for message_error in @user.errors.full_messages %>
       <li><%= message_error %></li>
     <% end %>
-    <li><%= flash[:notice]%></li>
-  </ul>
-<% end %>
+  <% end %>
+  <li><%= flash[:notice]%></li>
+</ul>

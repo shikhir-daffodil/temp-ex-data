@@ -19,7 +19,7 @@
           <div class="header_links">
             <ul>
               <li><%= link_to( "Home", :controller => 'admin', :action => 'home') %></li>
-              <li><%= link_to( "Profile", '#') %></li>
+              <li><%= link_to( "Profile",:controller => 'users', :action => 'profile') %></li>
               <li><%= link_to( "Settings",:controller => 'admin', :action => 'settings') %></li>
               <li><%= link_to( "Logout",:controller => 'users', :action => 'logout') %></li>
             </ul>

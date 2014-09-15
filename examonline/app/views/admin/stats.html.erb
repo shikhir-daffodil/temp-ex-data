@@ -1,4 +1,20 @@
 <% provide(:title, 'Statistics') %>
+<script>
+  $(document).ready(function() {
+    $('#selectall').click(function(event) {  //on click
+      if (this.checked) { // check select status
+        $('.questions_check').each(function() { //loop through each checkbox
+          this.checked = true;  //select all checkboxes with class "checkbox1"              
+        });
+      } else {
+        $('.questions_check').each(function() { //loop through each checkbox
+          this.checked = false; //deselect all checkboxes with class "checkbox1"                      
+        });
+      }
+    });
+
+  });
+</script>
 <h1>Test Statistics</h1>
 <% if @stats %>
   <div class="filter">
@@ -8,19 +24,24 @@
       User:<%= text_field_tag 'user', params[:user] %>
       Questions:<span><%= select_tag 'qnum', options_for_select(['>', '<', '='], params[:qnum]) %><%= number_field_tag 'qnumval', params[:qnumval] %></span>
       Percentage:<span><%= select_tag 'percent', options_for_select(['>', '<', '='], params[:percent]) %><%= number_field_tag 'percentval', params[:percentval] %></span>
-    <br>Date:  
-    <% if params[:dateval] %>
-    <% event = params[:dateval] %>
-      <span><%= select_tag 'date', options_for_select([["Before", "<"], ["After", ">"]], params[:date]) %><%= date_select("dateval", "on", order: [:month, :day, :year], default: { day: event["on(3i)"].to_i, month: event["on(2i)"].to_i, year: event["on(1i)"].to_i }) %></span>
+      Date:  
+      <% if params[:dateval] %>
+        <% event = params[:dateval] %>
+        <span><%= select_tag 'date', options_for_select([["Before", "<"], ["After", ">"]], params[:date]) %><%= date_select("dateval", "on", order: [:month, :day, :year], default: { day: event["on(3i)"].to_i, month: event["on(2i)"].to_i, year: event["on(1i)"].to_i }) %></span>
       <% else %>
-      <span><%= select_tag 'date', options_for_select([["Before", "<"], ["After", ">"]], params[:date]) %><%= date_select("dateval", "on", order: [:month, :day, :year]) %></span>
+        <span><%= select_tag 'date', options_for_select([["Before", "<"], ["After", ">"]], params[:date]) %><%= date_select("dateval", "on", order: [:month, :day, :year], default: { day: (Time.now.strftime('%d').to_i + 1), month: Time.now.strftime('%m').to_i, year: Time.now.strftime('%Y').to_i }) %></span>
       <% end %>
       <%= submit_tag 'Apply' %>
     <% end %>
+    <span class="link"><%= link_to 'Clear', {:action => 'stats'} %></span>
   </div>
+<%= form_tag url_for(:action => 'destroy'), method: :delete do %>
   <div class="divtable">
     <div class="table">
       <div class="tr">
+        <div class="td"><%= submit_tag "", data: { confirm: "Are you sure you want to delete these?" }%><br>
+          <%= check_box_tag "selectall" %>
+        </div>
         <div class="td">Test Name</div>
         <div class="td">Test Login ID</div>
         <div class="td">Test Subject</div>    
@@ -33,23 +54,64 @@
       </div>
       <% @stats.each do |result| %>
         <div class="tr">
-          <div class="td"><%= Test.find(result.test_id).testname %></div>
-          <div class="td"><%= Test.find(result.test_id).testlogin %></div>
-          <div class="td"><%= Test.find(result.test_id).subject %></div>
-          <div class="td"><%= User.find(result.user_id).name %></div>
+          <% @testname = "" %>
+          <% @testlogin = "" %>
+          <% @testsub = "" %>
+          <% @testques = "" %>
+          <%if !(@test = Test.where(id: result.test_id).take).blank? %>
+            <% @testname = @test.testname %>
+            <% @testlogin = @test.testlogin %>
+            <% @testsub = @test.subject %>
+            <% @testques = @test.quescount %>
+          <% end %>
+          <div class="td">
+            <%= check_box_tag "results[]", result.id, false, class: "questions_check" %>
+            </div>
+          <div class="td"><% if @testname.blank? %>
+              <em>deleted</em>
+            <% else %>
+              <%= @testname %>
+            <% end %>
+          </div>
+          <div class="td"><% if @testlogin.blank? %>
+              <em>deleted</em>
+            <% else %>
+              <%= @testlogin %>
+            <% end %>
+          </div>
+          <div class="td"><% if @testsub.blank? %>
+              <em>deleted</em>
+            <% else %>
+              <%= @testsub %>
+            <% end %>
+          </div>
+          <div class="td"><%if !(@user = User.where(id: result.user_id).take).blank? %>
+              <% @user.name %>
+            <% else %>
+              <em>deleted</em>
+            <% end %>
+          </div>
           <div class="td"><%= result.correct %></div>
           <div class="td"><%= result.incorrect %></div>
-          <div class="td"><%= Test.find(result.test_id).quescount %></div>
+          <div class="td"><% if @testques.blank? %>
+              <em>deleted</em>
+            <% else %>
+              <%= @testques %>
+            <% end %>
+          </div>
           <div class="td"><%= @percent = (result.correct * 100)/(result.correct + result.incorrect) %>&percnt;</div>
           <div class="td"><%= result.created_at.strftime("%b %d, %Y") %></div>
         </div>
       <% end %>
     </div>
   </div>
+  <% end %>
   <div class="apple_pagination">
     <%= will_paginate @stats %>
   </div>
-  <div class="average">Average Score is: 100&percnt;</div>
+  <div class="average">Average Score: <%= @avg %>&percnt;</div>
+  <div class="average">Total Tests: <%= @statcount %></div>
+  <div class="average">Number of Users: <%= @usercount %></div>
 <% else %>
   <div class="average">No result to display</div>
 <% end %>

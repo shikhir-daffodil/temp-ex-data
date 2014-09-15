@@ -124,7 +124,7 @@ select{
     margin-bottom: 10px;
 }
 input[type=submit]{
-    width: 100%;
+    width: 103%;
     margin: 10px 6px 15px auto;
 }
 .options_div input{
@@ -187,9 +187,9 @@ input[type=submit]{
     -webkit-border-bottom-left-radius:0px;
     border-bottom-left-radius:0px;
 }.divtable .tr:hover .td{
-    background: #ada8b3;
-}.divtable .tr:nth-child(1):hover .td{ transform: none;}
-.divtable .tr:nth-child(odd){ background-color:#e5e5e5;}
+    background: #b9c19c;
+}.divtable .tr:nth-child(1):hover .td{transform: none; }
+.divtable .tr:nth-child(odd){ background-color:#d4d8c7;}
 .divtable .tr:nth-child(even){ background-color:#ffffff; }.divtable .td{
     vertical-align:middle;
     border:1px solid #000000;
@@ -211,11 +211,11 @@ input[type=submit]{
     border-width:0px 0px 0px 0px;
 }
 .divtable .tr:first-child .td{
-    background:-o-linear-gradient(bottom, #a59d9d 5%, #e5dede 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #a59d9d), color-stop(1, #e5dede) );
-    background:-moz-linear-gradient( center top, #a59d9d 5%, #e5dede 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#a59d9d", endColorstr="#e5dede");	background: -o-linear-gradient(top,#a59d9d,e5dede);
+    background:-o-linear-gradient(bottom, #61674c 5%, #d4d8c7 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #61674c), color-stop(1, #d4d8c7) );
+    background:-moz-linear-gradient( center top, #61674c 5%, #d4d8c7 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#61674c", endColorstr="#d4d8c7");	background: -o-linear-gradient(top,#61674c,#d4d8c7);
 
-    background-color:#a59d9d;
+    background-color:#61674c;
     border:0px solid #000000;
     text-align:center;
     border-width:0px 0px 1px 1px;
@@ -225,10 +225,10 @@ input[type=submit]{
     color:#ffffff;
 }
 .divtable .tr:first-child:hover .td{
-    background:-o-linear-gradient(bottom, #a59d9d 5%, #e5dede 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #a59d9d), color-stop(1, #e5dede) );
-    background:-moz-linear-gradient( center top, #a59d9d 5%, #e5dede 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#a59d9d", endColorstr="#e5dede");	background: -o-linear-gradient(top,#a59d9d,e5dede);
-    background-color:#a59d9d;
+    background:-o-linear-gradient(bottom, #61674c 5%, #d4d8c7 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #61674c), color-stop(1, #d4d8c7) );
+    background:-moz-linear-gradient( center top, #61674c 5%, #d4d8c7 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#61674c", endColorstr="#d4d8c7");	background: -o-linear-gradient(top,#61674c,e5dede);
+    background-color:#61674c;
 }
 .divtable .tr:first-child .td:first-child{
     border-width:0px 0px 1px 0px;
@@ -282,14 +282,19 @@ html,body{
     line-height: 1.5;
     color: #574d43;
 }
-.apple_pagination a {
+.apple_pagination a, .apple_pagination a:visited {
     text-decoration: none;
     color: brown; }
 .apple_pagination a:hover, .apple_pagination a:focus {
     text-decoration: underline; 
 }
 .average{
-    color: white;
+    color: #9e516a;
+    text-align: left;
+    width: 90%;
+    margin: auto;
+    padding: 10px;
+    letter-spacing: 2px;
 }
 .link a, a:visited{
     color: #946e55;
@@ -303,21 +308,40 @@ html,body{
     width: 100px;
 }
 .filter{
-    width: 970px;
+    width: 95%;
     font-size: 12px;
     margin: auto;
+    text-align: left;
     padding: 0 -10px 0 -10px;
+}
+.filter *{
+    font-size: 11px;
 }
 .filter input{
     width: 80px;
-    font-size: 12px;
     margin-right: 15px;
 }
 .filter select{
-    font-size: 12px;
     margin-right: 15px;
 }
 .filter span select{
-    font-size: 12px;
     margin-right: 0;
+}
+.ptable{
+    width:200px;
+    margin: auto;
+    list-style-type: none;
+    display: table;
+    text-align: left;
+}
+.row{
+    display: table-row;
+}
+.row li{
+    display: table-cell;
+    padding: 6px 10px 6px 5px;
+}
+.row li a, .row li a:visited{
+    font-size: 12px;
+    color: #373C54;
 }

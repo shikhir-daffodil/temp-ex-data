@@ -1,43 +1,106 @@
 <% @sub = Test.find(session[:test_id]).subject.capitalize %>
 <% provide(:title, @sub+" Test") %>
 <h1><%= @sub %> Test</h1>
-<div id="sticker" class="stick"><div id="timer"></div></div>
-<div class="clear"></div>
-<script>
+<ul id="sticker" class="">
+  <li id = "all">All</li>
+  <li id = "attempted">Attempted</li>
+  <li id = "unattempted">Un-attempted</li>
+  <li id="timer"></li>
+</ul>
+<script type="text/javascript">
+  $(document).ready(function() {
 <% h = (session[:test_hour].to_i - Time.now.hour) * 3600 %>
 <% m = (session[:test_min].to_i - Time.now.strftime("%M").to_i) * 60 %>
 <% s = (session[:test_sec].to_i - Time.now.strftime("%S").to_i) %>
-  var count = <%= h + m + s + 2 %>;
-  var counter = setInterval(timer, 1000);
+    var count = <%= h + m + s + 2 %>;
+    var counter = setInterval(timer, 1000);
 
-  function timer() {
-    count = count - 1;
-    if (count == -1) {
-      clearInterval(counter);
-      return;
+    function timer() {
+      count = count - 1;
+      if (count == -1) {
+        clearInterval(counter);
+        return;
+      }
+
+      var seconds = count % 60;
+      var minutes = Math.floor(count / 60);
+      var hours = Math.floor(minutes / 60);
+      minutes %= 60;
+      hours %= 60;
+
+      document.getElementById("timer").innerHTML = "Time Left: " + hours + "." + minutes + "." + seconds;
     }
-
-    var seconds = count % 60;
-    var minutes = Math.floor(count / 60);
-    var hours = Math.floor(minutes / 60);
-    minutes %= 60;
-    hours %= 60;
-
-    document.getElementById("timer").innerHTML = "Time Left: " + hours + "." + minutes + "." + seconds;
-  }
-  a = count * 1000 + 300
-  setTimeout(function timeup() {
-    alert("Time's Up")
-    document.getElementById("answer_form").submit();
-  }, a);
+    a = count * 1000 + 300;
+    setTimeout(function timeup() {
+      alert("Time's Up");
+      document.getElementById("answer_form").submit();
+    }, a);
+    function promptBeforeClose() {
+      return 'Are you sure you want to leave? All data will be lost';
+    }
+    $(window).on('beforeunload', promptBeforeClose);
+    $(document).on('click', '#showresult', function(e) {
+      $(window).off('beforeunload', promptBeforeClose);
+    });
+    
+    $.fn.fix_radios = function() {
+      function focus() {
+        if (!this.checked)
+          return;
+        if (!this.was_checked) {
+          $(this).change();
+        }
+      }
+      function change(e) {
+        if (this.was_checked) {
+          e.stopImmediatePropagation();
+          return;
+        }
+        $("input[name=" + this.name + "]").each(function() {
+          this.was_checked = this.checked;
+        });
+      }
+      return this.focus(focus).change(change);
+    }
+    
+    $(function() {
+      $("input[type=radio]").fix_radios();
+    });
+    $('input:radio, input:checkbox').on('click', function() {
+      $(this).parent().parent().addClass('attempted');
+      $(this).parent().parent().removeClass('notattempted');
+    });
+    $("#all").click(function() {
+      $(".attempted").show(1000);
+      $(".notattempted").show(1000);
+    });
+    $("#unattempted").click(function() {
+      $(".attempted").hide(1000);
+      $(".notattempted").show(1000);
+    });
+    $("#attempted").click(function() {
+      $(".attempted").show(1000);
+      $(".notattempted").hide(1000);
+    });
+    var s = $("#sticker");
+    var pos = s.position();                   
+    $(window).scroll(function() {
+        var windowpos = $(window).scrollTop();
+        if (windowpos >= pos.top) {
+            s.addClass("stick");
+        } else {
+            s.removeClass("stick");
+        }
+    });
+  });
 </script>
 <br>
-
+<br>
 <%= form_tag url_for(:controller => 'tests', :action => 'result'), :method => 'post', id: "answer_form" do -%>
   <div class="questionaire">
     <% counter = 1 %>
     <% @questions.each do |question| %>
-      <div class="question-container">
+      <div class="question-container notattempted">
         <span class="question">Q<%= counter %>. <%= question.ques %></span>
         <span class="options">
           <% if question.multichoice.to_s == "Yes" %>
@@ -59,6 +122,6 @@
         <% counter+=1 %>
       <% end %>
       <br>
-      <%= submit_tag 'Submit Test' %>
+      <%= submit_tag 'Submit Test', :id => 'showresult' %>
     </div>
   <% end -%>

@@ -76,7 +76,11 @@ Rails.application.routes.draw do
   
   get 'users/profile'
   
-  post 'users/profile'  
+  post 'users/profile'
+  
+  post 'admin/addcategory'
+  
+  post 'admin/delcategory'
   
   delete 'admin/destroy_multipletest'
   
@@ -95,6 +99,12 @@ Rails.application.routes.draw do
   resources :admin do
     collection do
       delete 'del_mul_ques'
+    end
+  end 
+  
+  resources :admin do
+    collection do
+      delete 'destroy'
     end
   end 
 

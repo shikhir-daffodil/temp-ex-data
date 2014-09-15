@@ -12,7 +12,6 @@
         });
       }
     });
-
   });
 </script>
 <h1>Users List</h1><%= flash[:notice]%>
@@ -24,6 +23,7 @@
     User Type:<%= select_tag 'usertype', options_for_select(['Admin', 'Examiner', 'Examinee'], params[:usertype]), {:include_blank => ''} %>
     <%= submit_tag 'Apply' %>
   <% end %>
+  <span class="link"><%= link_to 'Clear', {:action => 'view'} %></span>
 </div>
 <%= form_tag destroy_multiple_users_path, method: :delete do %>
   <div class="divtable" >

@@ -146,6 +146,15 @@ class AdminController < ApplicationController
     redirect_to action: 'viewquestions', controller: 'admin'    
   end
   
+  def destroy
+    if params[:results]
+      Result.delete(params[:results])
+    else
+      flash[:notice] = "No records selected"
+    end
+    redirect_to action: 'stats', controller: 'admin' 
+  end
+  
   def editquestion
     if !session[:user_id]
       flash[:notice] = "You Need to Log In First"
@@ -303,6 +312,19 @@ class AdminController < ApplicationController
       else
         @stats = Result.all.paginate(:page => params[:page], :per_page => 10)
       end
+      @correct = 0
+      @incorrect = 0
+      @statcount = @stats.count
+      @usercount = @stats.uniq.pluck(:user_id).count
+      @stats.each do |res|
+        @correct += res.correct.to_i
+        @incorrect += res.incorrect.to_i
+      end
+      if @correct + @incorrect > 0
+        @avg = (@correct * 100)/(@correct + @incorrect)
+      else
+        @avg = 0
+      end
     end
   end
   
@@ -345,6 +367,25 @@ class AdminController < ApplicationController
   def importQuestions
     Question.import(params[:file])
     redirect_to action: csv_actions, notice: "Products Successfully Imported"
+  end
+  
+  def settings    
+  end
+  
+  def addcategory
+    @subject = Subject.new(:subject => params[:subject])
+    if @subject.save
+      flash[:notice] = 'New Subject Added'
+      redirect_to action: 'settings'
+    else      
+      flash[:notice] = 'Subject Already Exists'
+      redirect_to action: 'settings'
+    end
+  end
+  
+  def delcategory
+    Subject.find_by(:subject => params[:subject][:sub]).destroy
+    redirect_to action: 'settings'
   end
   
   private

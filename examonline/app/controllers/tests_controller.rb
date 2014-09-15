@@ -1,23 +1,24 @@
 class TestsController < ApplicationController
   layout "users"
-  
   def instructions
     if !(session[:test_id] || session[:user_id])
       flash[:notice] = "You Need to Log In First"
-      redirect_to(:action => 'home', :controller=>'tests')      
+      redirect_to(:action => 'home', :controller=>'tests')   
+    else
+      session[:questions] = []
+      t = Time.now
+      x = Test.find(session[:test_id]).duration
+      if x > 60
+        h = (x / 60)
+        session[:test_hour] = t.hour + h
+        m = x % 60
+        session[:test_min] = t.strftime("%M").to_i + m
+      else      
+        session[:test_hour] = t.hour
+        session[:test_min] = t.strftime("%M").to_i + x
+      end
+      session[:test_sec] = t.strftime("%S")
     end
-    t = Time.now
-    x = Test.find(session[:test_id]).duration
-    if x > 60
-      h = (x / 60).to_i
-      session[:test_hour] = t.hour + h
-      m = x % 60
-      session[:test_min] = t.strftime("%M").to_i + m
-    else      
-      session[:test_hour] = t.hour
-      session[:test_min] = t.strftime("%M").to_i + x
-    end
-    session[:test_sec] = t.strftime("%S")
   end
 
   def test_paper
@@ -25,9 +26,18 @@ class TestsController < ApplicationController
       flash[:notice] = "You Need to Log In First"
       redirect_to(:action => 'home', :controller=>'tests')
     else
-      @count = Test.find(session[:test_id]).quescount
-      @subject = Test.find(session[:test_id]).subject
-      @questions = Question.where(quetype: @subject, isactive: 'Active').sample(@count)
+      if session[:questions].blank?
+        @count = Test.find(session[:test_id]).quescount
+        @subject = Test.find(session[:test_id]).subject
+        @ques = Question.where(quetype: @subject, isactive: 'Active').sample(@count)
+        @ques.each{|z| session[:questions] << z.id}
+      end
+      @arr = Array.new
+      session[:questions].each do |q|
+        @arr << q
+      end
+      puts @arr
+      @questions = Question.find( @arr )
     end
   end
 

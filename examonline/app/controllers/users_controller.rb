@@ -37,7 +37,11 @@ class UsersController < ApplicationController
         flash[:color]= "valid"
         redirect_to action: 'home'
       else
-        render 'edit'
+        if User.find(session[:user_id]).usertype == 'Admin'
+          render :action => 'edit', :layout => 'admin_layout'
+        else
+          render :action => 'edit'
+        end
       end
     elsif params[:commit] == 'Save User' 
       @user = User.find(session[:temp_id])         
@@ -80,7 +84,12 @@ class UsersController < ApplicationController
         render 'users/adduser', :layout => 'admin_layout'
       end 
     elsif params[:commit] == 'Create and continue'
-      render 'users/adduser', :layout => 'admin_layout'
+      if @user.save
+        flash[:notice] = "New User Created"
+        render 'users/adduser', :layout => 'admin_layout'
+      else
+        render 'users/adduser', :layout => 'admin_layout'
+      end
     end
   end
   
@@ -103,9 +112,13 @@ class UsersController < ApplicationController
   end
 
   def edit
-    if chk_session
+    case chk_session
+    when 'Examinee'
       @user = User.find(session[:user_id])
       render(:layout => "layouts/users")
+    when 'Admin'
+      @user = User.find(session[:user_id])
+      render(:layout => "layouts/admin_layout")
     else
       flash[:notice] = "You Need to Log In First"
       redirect_to(:action => 'login', :controller => 'users')
@@ -128,9 +141,13 @@ class UsersController < ApplicationController
   end
   
   def profile
-    if chk_session    
+    case chk_session    
+    when 'Examinee'
       @cuser = User.where("id = '#{session[:user_id]}'")
       render(:layout => "layouts/users")
+    when 'Admin'
+      @cuser = User.where("id = '#{session[:user_id]}'")
+      render(:layout => "layouts/admin_layout")
     else
       flash[:notice] = "You Need to Log In First"
       redirect_to(:action => 'login', :controller => 'users')

@@ -1,2 +1,19 @@
 <% provide(:title, 'Settings') %>
-<h1><%= "admin/settings" %></h1>
+<h1>Settings</h1>
+<div class="forms">
+  <div class="forms_container">
+    <br>
+    <%= form_tag url_for(:controller => 'admin', :action => 'addcategory') do %>
+      Enter New Subject:
+      <%= text_field_tag 'subject' %>
+      <%= submit_tag 'Add Subject' %>
+    <% end %>
+      <%= flash[:notice] %>
+      <hr>
+    <%= form_tag url_for(:controller => 'admin', :action => 'delcategory') do %>
+      Select Subject:
+      <%= collection_select 'subject', :sub, Subject.all, :subject, :subject %>
+      <%= submit_tag 'Delete Subject', data: { confirm: "Are you sure you want to delete this subject?" } %>
+    <% end %>
+  </div>
+</div>

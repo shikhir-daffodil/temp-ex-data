@@ -24,12 +24,13 @@
     <%= submit_tag 'Apply' %>
     <span class="link"><%= link_to 'CSV Opions', {:action => 'csv_actions'} %></span>
   <% end %>
+  <span class="link"><%= link_to 'Clear', {:action => 'viewquestions'} %></span>
 </div>
 <%= form_tag url_for(:controller => 'admin', :action => 'del_mul_ques'), method: :delete do %>
   <div class="divtable" >
     <div class="table">
       <div class="tr">
-        <div class="td"><%= submit_tag "", data: { confirm: "Are you sure you want to delete these?" }%><br>
+        <div class="td"><%= submit_tag "", data: { confirm: "Are you sure you want to delete these?" } %><br>
           <%= check_box_tag "selectall" %>
         </div>
         <div class="td">Question</div>

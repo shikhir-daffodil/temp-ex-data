@@ -25,6 +25,7 @@
     Created By:<%= text_field_tag 'createdby', params[:createdby] %>
     <%= submit_tag 'Apply' %>
   <% end %>
+  <span class="link"><%= link_to 'Clear', {:action => 'viewtest'} %></span>
 </div>
 <%= form_tag url_for(:controller => 'admin', :action => 'destroy_multipletest'), method: :delete do %>
   <div class="divtable" >

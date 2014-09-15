@@ -17,11 +17,11 @@
   </div>
   Already Signed Up<br>
   <%= link_to( "Sign In", :controller => "users", :action => "login") %>
-  <% if @user.errors.any? %>
   <ul class="errors">
-    <% for message_error in @user.errors.full_messages %>
-      <li><%= message_error %></li>
+    <% if @user.errors.any? %>
+      <% for message_error in @user.errors.full_messages %>
+        <li><%= message_error %></li>
+      <% end %>
     <% end %>
   </ul>
-<% end %>
 </div>

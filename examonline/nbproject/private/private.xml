@@ -12,10 +12,10 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/user/NetBeansProjects/examonline/app/views/admin/viewtest.html.erb</file>
             <file>file:/home/user/NetBeansProjects/examonline/app/views/admin/stats.html.erb</file>
+            <file>file:/home/user/NetBeansProjects/examonline/app/views/admin/viewquestions.html.erb</file>
             <file>file:/home/user/NetBeansProjects/examonline/app/controllers/admin_controller.rb</file>
-            <file>file:/home/user/NetBeansProjects/examonline/app/views/admin/view.html.erb</file>
+            <file>file:/home/user/NetBeansProjects/examonline/config/routes.rb</file>
         </group>
     </open-files>
 </project-private>
