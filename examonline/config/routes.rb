@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   get 'admin/csv_actions'
 
-  post 'users/reset_pass'
+  get 'users/reset_pass'
 
   get 'admin/settings'
 
@@ -54,6 +54,8 @@ Rails.application.routes.draw do
   
   post 'users/tryedit'
   
+  post 'users/editself'
+  
   post 'admin/update'
   
   get 'users/new'
@@ -84,6 +86,8 @@ Rails.application.routes.draw do
   
   delete 'admin/destroy_multipletest'
   
+  delete 'admin/del_mul_ques'
+  
   resources :users do
     collection do
       delete 'destroy_multiple'
@@ -95,12 +99,6 @@ Rails.application.routes.draw do
       post :importQuestions
     }
   end
-  
-  resources :admin do
-    collection do
-      delete 'del_mul_ques'
-    end
-  end 
   
   resources :admin do
     collection do

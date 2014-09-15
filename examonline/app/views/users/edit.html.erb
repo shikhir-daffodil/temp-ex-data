@@ -4,11 +4,11 @@
   <div class="forms_container">
     <br>
 
-    <%= form_for(:user, :url => {:controller => 'users', :action => 'tryedit', :id=>session[:user_id]}) do |f| %>
+    <%= form_for(:user, :url => {:controller => 'users', :action => 'editself', :id=>session[:user_id]}) do |f| %>
       Name:<br> <%= f.text_field :name%>
       Email:<br> <%= f.email_field :email%>
       Phone No.:<br> <%= f.phone_field :phone%>
-      Experience(yrs):<br><%= f.number_field :experience%> 
+      Experience(yrs):<br><%= f.number_field :experience, in: 0...25 %> 
       Password:<br> <%= f.password_field :password%>
       <hr>
       <%= f.submit 'Save' %>

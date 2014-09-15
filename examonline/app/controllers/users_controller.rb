@@ -18,9 +18,11 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @user.usertype = 'Examinee'
     @user.activity = 'Active'
+    @pass = @user.password
+    puts @pass
     if @user.save
       session[:user_id] = @user.id
-      UserMailer.welcome_email(@user.name, @user.email, @user.password).deliver
+      UserMailer.welcome_email(@user.name, @user.email, @pass).deliver
       flash[:notice] = "You signed up successfully"
       flash[:color]= "valid"
       redirect_to action: 'home'
@@ -28,31 +30,31 @@ class UsersController < ApplicationController
       render "new"
     end
   end
+  
+  def editself
+    @user = User.find(params[:id])  
+    if @user.update(user_params)
+      flash[:notice] = "Records Updated Successfully"
+      flash[:color]= "valid"
+      redirect_to action: 'home'
+    else
+      if User.find(session[:user_id]).usertype == 'Admin'
+        render :action => 'edit', :layout => 'admin_layout'
+      else
+        render :action => 'edit'
+      end
+    end
+  end
 
   def tryedit
-    if params[:commit] == 'Save'  
-      @user = User.find(params[:id])  
-      if @user.update(user_params)
-        flash[:notice] = "Records Updated Successfully"
-        flash[:color]= "valid"
-        redirect_to action: 'home'
-      else
-        if User.find(session[:user_id]).usertype == 'Admin'
-          render :action => 'edit', :layout => 'admin_layout'
-        else
-          render :action => 'edit'
-        end
-      end
-    elsif params[:commit] == 'Save User' 
-      @user = User.find(session[:temp_id])         
-      if @user.update(user_params2)
-        flash[:notice] = "Records Updated Successfully"
-        flash[:color]= "valid"
-        redirect_to action: 'view', controller: 'admin'
-      else
-        render 'edituser', :layout => 'admin_layout'
-      end
-    end      
+    @user = User.find(session[:temp_id])         
+    if @user.update(user_params2)
+      flash[:notice] = "Records Updated Successfully"
+      flash[:color]= "valid"
+      redirect_to action: 'view', controller: 'admin'
+    else
+      render 'edituser', :layout => 'admin_layout'
+    end
   end
 
   def login
@@ -74,10 +76,11 @@ class UsersController < ApplicationController
   
   def addnew
     @user = User.new(user_params2)
-    @user.password = rand_string
-    UserMailer.welcome_email(@user.name, @user.email, @user.password).deliver
+    @pass = rand_string
+    @user.password = @pass
     if params[:commit] == 'Create'      
       if @user.save
+        UserMailer.welcome_email(@user.name, @user.email, @pass).deliver
         flash[:notice] = "New User Created"
         redirect_to action: 'home', controller: 'admin'
       else
@@ -199,10 +202,8 @@ class UsersController < ApplicationController
       if @user.update(password: @password)
         flash[:notice] = "Password Reset Successful"
         flash[:color]= "valid"
-        redirect_to controller: 'users', action: 'edituser', layout: 'admin_layout'
-      else
-        render 'edituser'
       end
+      redirect_to  action: 'edituser', layout: 'admin_layout'
     else
       if @user = User.find_by(email: params[:email])
         @password = rand_string
@@ -212,11 +213,11 @@ class UsersController < ApplicationController
           render action: 'login', layout: 'application'
         else
           flash[:notice] = "Invalid Email- Password Reset Error"
-          redirect_to action: 'forgot'
+          redirect_to action: 'forgot', layout: 'application'
         end
       else
         flash[:notice] = "Invalid Email- Password Reset Error"
-        redirect_to action: 'forgot'
+        redirect_to action: 'forgot', layout: 'application'
       end
     end
   end

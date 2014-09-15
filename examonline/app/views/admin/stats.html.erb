@@ -86,7 +86,7 @@
             <% end %>
           </div>
           <div class="td"><%if !(@user = User.where(id: result.user_id).take).blank? %>
-              <% @user.name %>
+              <%= @user.name %>
             <% else %>
               <em>deleted</em>
             <% end %>

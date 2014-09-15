@@ -93,7 +93,7 @@ class TestsController < ApplicationController
       flash[:notice] = "Welcome, your test id is #{authorized_test.testlogin}."
       flash[:note] = "Login to Continue"
       redirect_to(:controller => 'users', :action => 'login')
-    elsif session[:user_id]
+    elsif session[:user_id] && authorized_test
       session[:test_id] = authorized_test.id
       redirect_to(:controller => 'users', :action => 'home')
     else

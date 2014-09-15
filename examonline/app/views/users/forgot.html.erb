@@ -3,7 +3,7 @@
   <h1>Reset Password</h1>
   <div class="forms_container">
     <hr>
-    <%= form_tag url_for(:controller => 'users', :action => 'reset_pass') do %>
+    <%= form_tag url_for(:controller => 'users', :action => 'reset_pass'), method: "get" do %>
       Email:<br> <%= email_field_tag :email%><%= submit_tag 'Reset Password' %>
     <% end %>
   </div>

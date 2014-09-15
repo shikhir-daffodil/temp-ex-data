@@ -31,9 +31,9 @@ class AdminController < ApplicationController
   
   def userfilter(name, email, exp, expval, phone, usertype)
     if expval.blank?
-      expval = 0
+      expval = -1
     end
-    @users = User.all.where("email LIKE (?)", "#{email}%").where("name LIKE (?)", "#{name}%").where("experience #{exp}#{expval}").where("phone LIKE (?)", "#{phone}%").where("usertype LIKE (?)", "#{usertype}%")
+    @users = User.all.where("name LIKE (?)", "#{name}%").where("email LIKE (?)", "#{email}%").where("experience #{exp}#{expval}").where("phone LIKE (?)", "#{phone}%").where("usertype LIKE (?)", "#{usertype}%")
     return @users
   end
   
@@ -127,7 +127,7 @@ class AdminController < ApplicationController
   end
   
   def questionfilter(subject, multi, isactive)
-    @question = Question.all.where("quetype LIKE (?)", "#{subject}%").where("multichoice LIKE (?)", "#{multi}%").where("isactive LIKE (?)", "#{isactive}%")
+    @question = Question.all.where("quetype LIKE (?)", "%#{subject}%").where("multichoice LIKE (?)", "#{multi}%").where("isactive LIKE (?)", "#{isactive}%")
     return @question
   end
   
@@ -139,11 +139,14 @@ class AdminController < ApplicationController
   
   def del_mul_ques
     if params[:questions]
-      Question.destroy(params[:questions])
+      params[:questions].each do |ques|
+        Question.destroy(ques)
+      end
+      flash[:notice] = "Selected Questions successfully deleted"
     else
       flash[:notice] = "No records selected"
     end
-    redirect_to action: 'viewquestions', controller: 'admin'    
+    redirect_to action: 'viewquestions', controller: 'admin'   
   end
   
   def destroy
@@ -288,10 +291,10 @@ class AdminController < ApplicationController
       params[:tests].each do |test|
         Test.destroy(test)
       end
+      flash[:notice] = "Selected Tests successfully deleted"
     else
       flash[:notice] = "No records selected"
     end
-    flash[:notice] = "Selected Tests successfully deleted"
     redirect_to action: 'viewtest', controller: 'admin'
   end
   
@@ -378,7 +381,7 @@ class AdminController < ApplicationController
       flash[:notice] = 'New Subject Added'
       redirect_to action: 'settings'
     else      
-      flash[:notice] = 'Subject Already Exists'
+      flash[:notice] = 'Subject Already Exists or is blank'
       redirect_to action: 'settings'
     end
   end

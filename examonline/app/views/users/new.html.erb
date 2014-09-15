@@ -8,7 +8,7 @@
       Name:<br> <%= f.text_field :name%>
       Email:<br> <%= f.email_field :email%>
       Phone No.:<br> <%= f.phone_field :phone%>
-      Experience(yrs):<br><%= f.number_field :experience, :min => "0"%> 
+      Experience(yrs):<br><%= f.number_field :experience, in: 0...25 %> 
       Password:<br> <%= f.password_field :password%>
       Confirm Password:<br> <%= f.password_field :password_confirmation%>
       <hr>

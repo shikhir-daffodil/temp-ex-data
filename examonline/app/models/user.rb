@@ -1,12 +1,12 @@
 class User < ActiveRecord::Base
   attr_accessor :password
-  validates :name, :presence => true, :uniqueness => true, :length => { :in => 3..50 }
+  validates :name, format: { with: /\A\D[a-zA-Z]+\s?[a-zA-Z]*\D\z/, message: " Invalid" }, :presence => true, :length => { :in => 3..50 }
   validates :email, :presence => true, :uniqueness => { case_sensitive: false }, on: :tryedit
   validates :email, :presence => true, :uniqueness => { case_sensitive: false }
-  validates :phone, format: { with: /\d[0-9]\)*\z/, message: "Number Invalid" }, :length => { :in => 4..10 }
-  validates :experience, :presence => true
+  validates :phone, format: { with: /\A\S*\d{10}\S{0}\z/, message: "Number Invalid" }, :length => { :in => 10...11 }, :presence => true
+  validates :experience, :presence => true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 25 }
   validates :password, :confirmation => true , on: :create
-  validates_length_of :password, :in => 4..20
+  validates_length_of :password, :in => 4..20 , on: :create
   
   before_save :encrypt_password
   after_save :clear_password
