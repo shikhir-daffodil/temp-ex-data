@@ -19,12 +19,12 @@
 <% if @stats %>
   <div class="filter">
     <%= form_tag url_for(:controller => 'admin', :action => 'stats'), method: "get" do %>
-      Test ID:<%= text_field_tag 'testid', params[:testid] %>
-      Subject:<%= collection_select 'subject', :sub, Subject.all, :subject, :subject, :prompt => true %>
-      User:<%= text_field_tag 'user', params[:user] %>
-      Questions:<span><%= select_tag 'qnum', options_for_select(['>', '<', '='], params[:qnum]) %><%= number_field_tag 'qnumval', params[:qnumval] %></span>
-      Percentage:<span><%= select_tag 'percent', options_for_select(['>', '<', '='], params[:percent]) %><%= number_field_tag 'percentval', params[:percentval] %></span>
-      Date:  
+      Test ID: <%= text_field_tag 'testid', params[:testid] %>
+      Subject: <%= collection_select 'subject', :sub, Subject.all, :subject, :subject, :prompt => true %>
+      User: <%= text_field_tag 'user', params[:user] %>
+      Questions: <span><%= select_tag 'qnum', options_for_select(['>', '<', '='], params[:qnum]) %><%= number_field_tag 'qnumval', params[:qnumval] %></span>
+      Percentage: <span><%= select_tag 'percent', options_for_select(['>', '<', '='], params[:percent]) %><%= number_field_tag 'percentval', params[:percentval] %></span>
+      Date: 
       <% if params[:dateval] %>
         <% event = params[:dateval] %>
         <span><%= select_tag 'date', options_for_select([["Before", "<"], ["After", ">"]], params[:date]) %><%= date_select("dateval", "on", order: [:month, :day, :year], default: { day: event["on(3i)"].to_i, month: event["on(2i)"].to_i, year: event["on(1i)"].to_i }) %></span>

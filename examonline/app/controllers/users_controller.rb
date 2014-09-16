@@ -202,8 +202,12 @@ class UsersController < ApplicationController
       if @user.update(password: @password)
         flash[:notice] = "Password Reset Successful"
         flash[:color]= "valid"
+        render  action: 'edituser', layout: 'admin_layout'
+      else
+        flash[:notice] = "Reset Server Error"
+        flash[:color]= "invalid"
+        render  action: 'edituser', layout: 'admin_layout'        
       end
-      redirect_to  action: 'edituser', layout: 'admin_layout'
     else
       if @user = User.find_by(email: params[:email])
         @password = rand_string

@@ -102,16 +102,19 @@ hr{
     width: 40%;
 }
 .errors{
-    display: inline-table;
-    color: #fff;
+    color: #831824;
     text-align: left;
     font-size: 13px;
+    position: fixed;
+    margin-top: -430px;
+    margin-left: 850px;
 }
-.errors ul{
+.errors li:first-child{
     list-style-type: none;
 }
 .errors li{
-    list-style-type: none;
+    list-style-type: square;
+    line-height: 25px;
 }
 input[type=text],input[type=password],input[type=email],input[type=tel],input[type=number], textarea{
     color:#000;
@@ -262,7 +265,7 @@ html,body{
     height:20px;
 }
 .smallmsg{
-    font-size: 9px;
+    font-size: 11px;
     color: #6a1702;
     font-weight: 100;
 }
@@ -296,13 +299,17 @@ html,body{
     padding: 10px;
     letter-spacing: 2px;
 }
-.link a, a:visited{
+.link a,.link a:visited{
     color: #946e55;
     font-size: 15px;
 }
 .link{
     text-align: right;
     margin: 0 50px 10px 0;
+}
+.link2 a,.link2 a:visited{
+    color: #fdfce2;
+    font-size: 15px;
 }
 .btn input{
     width: 100px;
@@ -319,7 +326,7 @@ html,body{
 }
 .filter input{
     width: 80px;
-    margin-right: 15px;
+    margin-right: 10px;
 }
 .filter select{
     margin-right: 15px;

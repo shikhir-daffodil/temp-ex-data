@@ -7,8 +7,8 @@ class TestsController < ApplicationController
     else
       session[:questions] = []
       t = Time.now
-      x = Test.find(session[:test_id]).duration
-      if x > 60
+      x = Test.find(session[:test_id]).duration + 1
+      if x >= 60
         h = (x / 60)
         session[:test_hour] = t.hour + h
         m = x % 60
@@ -100,6 +100,45 @@ class TestsController < ApplicationController
       flash[:notice] = "Login Id or Password error"
       redirect_to(:action => 'home')
     end    
+  end
+  
+  def edittest
+    if !session[:user_id]
+      flash[:notice] = "You Need to Log In First"
+      redirect_to(:controller => 'users', :action => 'login')
+    elsif !(User.find(session[:user_id]).usertype == 'Admin')
+      reset_session
+      flash[:notice] = "You have been logged out Successfully"
+      redirect_to(:controller => 'users', :action => 'login')
+    else
+      session[:temp_id]=params[:test_id]
+      @test = Test.find(session[:temp_id])
+      render layout: "admin_layout"
+    end    
+  end
+  
+  def savetest
+    @test = Test.find(session[:temp_id])
+    if params[:test][:testpass].blank?
+      if @test.update(test_params)
+        flash[:notice] = "Test successfully updated"
+        redirect_to :controller => 'admin', :action => 'viewtest'
+      else
+        render :controller => 'tests', :action => 'edittest'
+      end
+    else
+      if @test.update(test_params, :testpass => params[:test][:testpass])
+        flash[:notice] = "Test successfully updated"
+        redirect_to :controller => 'admin', :action => 'viewtest'
+      else
+        render :controller => 'tests', :action => 'edittest'
+      end
+    end    
+  end
+  
+  private
+  def test_params
+    params.require(:test).permit(:duration, :quescount, :isactive, :testname, :testlogin)
   end
   
 end

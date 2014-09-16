@@ -30,7 +30,11 @@ Rails.application.routes.draw do
   
   post 'admin/editquestion'
   
+  post 'tests/edittest'
+  
   delete 'admin/deletequestion'
+  
+  delete 'admin/deletetest'
   
   post 'admin/view'
   
@@ -39,6 +43,8 @@ Rails.application.routes.draw do
   get 'admin/newtest'
   
   post 'admin/addtest'
+  
+  patch 'tests/savetest'
   
   get 'admin/viewtest'
   

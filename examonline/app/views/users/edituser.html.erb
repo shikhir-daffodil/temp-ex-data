@@ -11,7 +11,7 @@
       User Type: <%= f.select :usertype, options_for_select(%w[Examinee Examiner Admin]) %><br>
       Activity:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <%= f.select :activity, options_for_select(%w[Active Inactive]) %><br>
       <div class="smallmsg">*Password will not be changed by default.</div>
-      <%= link_to( "Reset Password",:controller => 'users', :action => 'reset_pass') %>
+      <span class="link2"><%= link_to( "Reset Password",:controller => 'users', :action => 'reset_pass') %></span>
       <hr>
       <%= f.submit 'Save User' %>
     <% end %><%= button_to "Cancel", action: "view", controller: "admin" %>

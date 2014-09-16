@@ -137,6 +137,12 @@ class AdminController < ApplicationController
     redirect_to :action => 'viewquestions', :controller => 'admin'    
   end
   
+  def deletetest
+    Test.find(params[:id]).destroy
+    flash[:success] = "Test deleted"
+    redirect_to :action => 'viewtest', :controller => 'admin'
+  end
+  
   def del_mul_ques
     if params[:questions]
       params[:questions].each do |ques|

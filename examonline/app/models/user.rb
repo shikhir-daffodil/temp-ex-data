@@ -9,15 +9,19 @@ class User < ActiveRecord::Base
   validates_length_of :password, :in => 4..20 , on: :create
   
   before_save :encrypt_password
-  after_save :clear_password
+  after_save :clear_fields
   def encrypt_password
     if password.present?
       self.salt = Digest::SHA1.hexdigest("#{email}#{Time.now}")
       self.encrypted_password= Digest::SHA1.hexdigest("#{salt},#{password}")
     end
   end
-  def clear_password 
+  def clear_fields
     self.password = nil
+    self.name = nil
+    self.email = nil
+    self.phone = nil
+    self.experience = nil
   end
   #----------------------------------- Login
   def self.authenticate(email="", login_password="")

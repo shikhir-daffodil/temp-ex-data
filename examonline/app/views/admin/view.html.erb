@@ -17,10 +17,10 @@
 <h1>Users List</h1><%= flash[:notice]%>
 <div class="filter">
   <%= form_tag url_for(:controller => 'admin', :action => 'view'), method: "get" do %>
-    Name:<%= text_field_tag 'name', params[:name] %>Email:<%= text_field_tag 'email', params[:email] %>
-    Experience:<span><%= select_tag 'exp', options_for_select(['>', '<', '='], params[:exp]) %><%= text_field_tag 'expval', params[:expval] %></span>
-    Phone:<%= text_field_tag 'phone', params[:phone] %>
-    User Type:<%= select_tag 'usertype', options_for_select(['Admin', 'Examiner', 'Examinee'], params[:usertype]), {:include_blank => ''} %>
+    Name: <%= text_field_tag 'name', params[:name] %>Email:<%= text_field_tag 'email', params[:email] %>
+    Experience: <span><%= select_tag 'exp', options_for_select(['>', '<', '='], params[:exp]) %><%= text_field_tag 'expval', params[:expval] %></span>
+    Phone: <%= text_field_tag 'phone', params[:phone] %>
+    User Type: <%= select_tag 'usertype', options_for_select(['Admin', 'Examiner', 'Examinee'], params[:usertype]), {:include_blank => ''} %>
     <%= submit_tag 'Apply' %>
   <% end %>
   <span class="link"><%= link_to 'Clear', {:action => 'view'} %></span>
