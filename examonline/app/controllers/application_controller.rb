@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
     response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "Tue, 05 Aug 2014 00:00:00 GMT"
+    response.headers["Expires"] = "Tue, 15 Sep 2014 00:00:00 GMT"
   end
   
 end

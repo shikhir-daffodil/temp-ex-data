@@ -296,3 +296,7 @@ html,body{
     right: 0;
     left: 0;
 }
+.test-button{
+    width: 100%;
+    text-align: center;
+}

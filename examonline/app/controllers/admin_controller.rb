@@ -366,10 +366,22 @@ class AdminController < ApplicationController
   end
   
   def csv_actions
-    @questions = Question.all
-    respond_to do |format|
-      format.html
-      format.csv { send_data @questions.to_csv }
+    if !session[:user_id]
+      flash[:notice] = "You Need to Log In First"
+      redirect_to(:action => 'login', :controller=>'users')
+    elsif !(User.find(session[:user_id]).usertype == 'Admin')
+      reset_session
+      flash[:notice] = "You were successfully logged out"
+      redirect_to(:controller => 'users', :action => 'login')
+    else
+      @questions = Question.all
+      respond_to do |format|
+        format.html
+        format.csv do
+          headers['Content-Disposition'] = "attachment; filename=\"question-list\""
+          headers['Content-Type'] ||= 'text/csv'
+        end
+      end
     end
   end
   

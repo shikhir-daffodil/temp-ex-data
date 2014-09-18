@@ -1,6 +1,7 @@
 <% provide(:title, 'CSV File Options') %>
 <h1>Download/Upload CSV File</h1>
-<h3>Download Questions CSV</h3><%= link_to "CSV", format: "csv" %>
+<h3>Download Questions CSV</h3>
+<span class="link"><%= link_to "CSV", format: :csv %></span>
 
 <h3>Import Questions CSV</h3>
 <%= form_tag url_for(:controller => 'admin', :action => 'importQuestions'), multipart: true do %>

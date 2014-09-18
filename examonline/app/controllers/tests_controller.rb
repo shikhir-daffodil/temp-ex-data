@@ -3,11 +3,28 @@ class TestsController < ApplicationController
   def instructions
     if !(session[:test_id] || session[:user_id])
       flash[:notice] = "You Need to Log In First"
-      redirect_to(:action => 'home', :controller=>'tests')   
+      redirect_to(:action => 'home', :controller=>'tests')
+    elsif !(session[:test_hour].blank? || session[:test_min].blank?)
+      session.delete "test_hour"
+      session.delete "test_min"
+      session.delete "test_id"
+      redirect_to(:action => 'home', :controller=>'users')
+    end
+  end
+  
+  def settimer
+    if !(session[:test_id] || session[:user_id])
+      flash[:notice] = "You Need to Log In First"
+      redirect_to(:action => 'home', :controller=>'tests')
+    elsif !(session[:test_hour].blank? || session[:test_min].blank?)
+      session.delete "test_hour"
+      session.delete "test_min"
+      session.delete "test_id"
+      redirect_to(:action => 'home', :controller=>'users')      
     else
       session[:questions] = []
       t = Time.now
-      x = Test.find(session[:test_id]).duration + 1
+      x = Test.find(session[:test_id]).duration
       if x >= 60
         h = (x / 60)
         session[:test_hour] = t.hour + h
@@ -18,7 +35,8 @@ class TestsController < ApplicationController
         session[:test_min] = t.strftime("%M").to_i + x
       end
       session[:test_sec] = t.strftime("%S")
-    end
+      redirect_to(:action => 'test_paper', :controller=>'tests')
+    end    
   end
 
   def test_paper
@@ -36,7 +54,6 @@ class TestsController < ApplicationController
       session[:questions].each do |q|
         @arr << q
       end
-      puts @arr
       @questions = Question.find( @arr )
     end
   end
@@ -75,7 +92,7 @@ class TestsController < ApplicationController
       @result.save
     end
   end
-  def finish_test    
+  def finish_test
     @var = session[:user_id]
     reset_session
     session[:user_id] = @var

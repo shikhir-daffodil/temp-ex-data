@@ -12,7 +12,7 @@
 <% h = (session[:test_hour].to_i - Time.now.hour) * 3600 %>
 <% m = (session[:test_min].to_i - Time.now.strftime("%M").to_i) * 60 %>
 <% s = (session[:test_sec].to_i - Time.now.strftime("%S").to_i) %>
-    var count = <%= h + m + s + 2 %>;
+    var count = <%= h + m + s + 1 %>;
     var counter = setInterval(timer, 1000);
 
     function timer() {
@@ -32,6 +32,7 @@
     }
     a = count * 1000 + 300;
     setTimeout(function timeup() {
+      $(window).off('beforeunload', promptBeforeClose);
       alert("Time's Up");
       document.getElementById("answer_form").submit();
     }, a);
@@ -42,7 +43,7 @@
     $(document).on('click', '#showresult', function(e) {
       $(window).off('beforeunload', promptBeforeClose);
     });
-    
+
     $.fn.fix_radios = function() {
       function focus() {
         if (!this.checked)
@@ -62,7 +63,7 @@
       }
       return this.focus(focus).change(change);
     };
-    
+
     $(function() {
       $("input[type=radio]").fix_radios();
     });
@@ -83,14 +84,14 @@
       $(".notattempted").hide(1000);
     });
     var s = $("#sticker");
-    var pos = s.position();                   
+    var pos = s.position();
     $(window).scroll(function() {
-        var windowpos = $(window).scrollTop();
-        if (windowpos >= pos.top) {
-            s.addClass("stick");
-        } else {
-            s.removeClass("stick");
-        }
+      var windowpos = $(window).scrollTop();
+      if (windowpos >= pos.top) {
+        s.addClass("stick");
+      } else {
+        s.removeClass("stick");
+      }
     });
   });
 </script>
@@ -122,6 +123,6 @@
         <% counter+=1 %>
       <% end %>
       <br>
-      <%= submit_tag 'Submit Test', :id => 'showresult' %>
+      <div class="test-button"><%= submit_tag 'Submit Test', :id => 'showresult' %></div>
     </div>
   <% end -%>

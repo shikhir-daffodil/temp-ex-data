@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   
   get 'tests/finish_test'
 
-  post 'tests/test_paper'
+  get 'tests/test_paper'
 
   post 'tests/result'
 
@@ -37,6 +37,8 @@ Rails.application.routes.draw do
   delete 'admin/deletetest'
   
   post 'admin/view'
+  
+  post 'tests/settimer'
   
   get 'admin/newques'
   

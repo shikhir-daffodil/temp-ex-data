@@ -27,9 +27,9 @@
 <br>
 <%= session[:test_time] %>
 <%= render "misc/instructions" %><br>
-<%= form_tag url_for(:controller => 'tests', :action => 'test_paper'), id: "test_form" do -%>
+<%= form_tag url_for(:controller => 'tests', :action => 'settimer'), id: "test_form" do -%>
 <div class="questionaire">
-<%= submit_tag 'Start Test' %>
+  <div class="test-button"><%= submit_tag 'Start Test' %></div>
 </div>
 <% end %>
 <%= link_to( "Back", :controller => "users", :action => "home")%>
