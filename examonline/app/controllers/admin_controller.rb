@@ -368,7 +368,7 @@ class AdminController < ApplicationController
   def csv_actions
     if !session[:user_id]
       flash[:notice] = "You Need to Log In First"
-      redirect_to(:action => 'login', :controller=>'users')
+      redirect_to :action => 'login', :controller=>'users'
     elsif !(User.find(session[:user_id]).usertype == 'Admin')
       reset_session
       flash[:notice] = "You were successfully logged out"
@@ -384,10 +384,15 @@ class AdminController < ApplicationController
       end
     end
   end
-  
-  def importQuestions
-    Question.import(params[:file])
-    redirect_to action: csv_actions, notice: "Products Successfully Imported"
+  def import_questions
+    if params[:file]
+      CSV.foreach(params[:file].path, headers: true) do |line|
+        puts line.to_hash["id"] if !line.to_hash["id"].blank?
+      end
+    else
+      flash[:notice] =  "No File Selected"
+      redirect_to action: 'csv_actions'
+    end
   end
   
   def settings    

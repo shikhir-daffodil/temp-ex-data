@@ -104,7 +104,7 @@ Rails.application.routes.draw do
   
   resources :admin do
     collection {
-      post :importQuestions
+      post :import_questions
     }
   end
   

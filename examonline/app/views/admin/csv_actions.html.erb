@@ -4,6 +4,7 @@
 <span class="link"><%= link_to "CSV", format: :csv %></span>
 
 <h3>Import Questions CSV</h3>
-<%= form_tag url_for(:controller => 'admin', :action => 'importQuestions'), multipart: true do %>
+<%= form_tag url_for(:controller => 'admin', :action => 'import_questions'), multipart: true do %>
   <%= file_field_tag :file %> <span class="btn"><%= submit_tag "Import" %></span>
 <% end %>
+<p><%= flash[:notice] %></p>
