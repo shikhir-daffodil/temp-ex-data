@@ -19,7 +19,6 @@ class UsersController < ApplicationController
     @user.usertype = 'Examinee'
     @user.activity = 'Active'
     @pass = @user.password
-    puts @pass
     if @user.save
       session[:user_id] = @user.id
       UserMailer.welcome_email(@user.name, @user.email, @pass).deliver
@@ -78,9 +77,11 @@ class UsersController < ApplicationController
     @user = User.new(user_params2)
     @pass = rand_string
     @user.password = @pass
+    @name = @user.name
+    @email = @user.email
     if params[:commit] == 'Create'      
       if @user.save
-        UserMailer.welcome_email(@user.name, @user.email, @pass).deliver
+        UserMailer.welcome_email(@name, @email, @pass).deliver
         flash[:notice] = "New User Created"
         redirect_to action: 'home', controller: 'admin'
       else

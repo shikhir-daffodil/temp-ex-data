@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-  default from: "<Email>"     # Change Accordingly
+  default from: "Your Email"     # Change Accordingly
   
   def welcome_email(name, email, password)
     @name = name
