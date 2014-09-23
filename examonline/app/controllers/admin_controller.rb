@@ -384,18 +384,122 @@ class AdminController < ApplicationController
       end
     end
   end
+  
   def import_questions
     if params[:file]
+      @invalid_ids = Array.new
       CSV.foreach(params[:file].path, headers: true) do |line|
-        puts line.to_hash["id"] if !line.to_hash["id"].blank?
+        @id = line.to_hash["id"]
+        if !@id.blank?
+          if !line.to_hash["answers"].blank? && !line.to_hash["options"].blank? && !line.to_hash["question"].blank? && !line.to_hash["subject"].blank? && !line.to_hash["multichoice"].blank? && !line.to_hash["isactive"].blank?
+            if !Question.find_by_id(@id).blank?
+              #------------------- Update Question
+              answers = line.to_hash["answers"].split(",")
+              answers = answers.collect{|x| x = x.strip}
+              ans = Array.new
+              @opts = line.to_hash["options"].split(",").collect{|x| x = x.strip}
+              i = 0
+              chk = false
+              @question = Question.find(@id)
+              if @question.update(:ques => line.to_hash["question"], :quetype => line.to_hash["subject"], :multichoice => line.to_hash["multichoice"], :isactive => line.to_hash["isactive"])
+                @options = @question.question_options.where(question_id: @id)
+                var_opt = Array.new
+                @opts.each do |val|
+                  var_opt.push(val)
+                end
+                len = var_opt.length
+                var = 0
+                @options.each do |opt|
+                  if !var_opt[var].blank?
+                    if var < len
+                      @option = QuestionOption.find(opt.id)
+                      @option.update(:option => var_opt[var].strip)
+                      var = var + 1
+                      chk = true
+                    end
+                  else
+                    chk = false
+                    break
+                  end
+                end
+                @options = @question.question_options.where(question_id: @id)
+                @options.each do |opt|
+                  if answers.include?(opt.option)
+                    ans[i]=opt.id
+                    i=i+1
+                  end        
+                end
+              end
+              c = ans.join(",")
+              if ans.empty? || (line.to_hash["answers"].include?(",") && line.to_hash["multichoice"] == "No")
+                chk = false
+              else
+                answer = Question.find(@id)
+                answer.update(answers: c)
+                chk = true
+              end    
+              if !chk
+                @invalid_ids << @id
+              end
+              #------------------- Update Question
+            elsif Question.find_by_id(@id).blank?
+              #------------------- New Question
+              answers = line.to_hash["answers"].split(",")
+              answers = answers.collect{|x| x = x.strip}
+              ans = Array.new
+              @opts = line.to_hash["options"].split(",").collect{|x| x = x.strip}
+              x = 0
+              chk = false
+              @question = Question.new(:id => @id, :ques => line.to_hash["question"], :quetype => line.to_hash["subject"], :multichoice => line.to_hash["multichoice"], :isactive => line.to_hash["isactive"])
+              if @question.save      
+                @opts.each do |opt|
+                  @option = @question.question_options.create(:option => opt)
+                  if @option.save && !opt.blank?
+                    chk = true
+                  else
+                    chk = false
+                    break
+                  end
+                  if answers.include?(opt)
+                    ans[x]=@option.id
+                    x=x+1
+                  end
+                end
+                c = ans.join(",")
+                if ans.empty? || (line.to_hash["answers"].include?(",") && line.to_hash["multichoice"] == "No")
+                  chk = false
+                  delques = Question.find(@id)
+                  delques.destroy
+                else
+                  answer = Question.find(@id)
+                  answer.update(answers: c)
+                  chk = true
+                end
+              end
+              if !chk
+                @invalid_ids << @id
+              end
+              #--------------------- New Question
+            end
+          else
+            @invalid_ids << @id
+          end
+        end
       end
+      if @invalid_ids.blank?
+        flash[:notice] = "Questions added or modified successfully "
+      else
+        @invalid_ids = @invalid_ids.join(", ")
+        flash[:notice] = "These were not added or modified due to some error " + @invalid_ids
+      end
+      redirect_to action: 'csv_actions'
     else
       flash[:notice] =  "No File Selected"
       redirect_to action: 'csv_actions'
     end
   end
   
-  def settings    
+  def settings
   end
   
   def addcategory

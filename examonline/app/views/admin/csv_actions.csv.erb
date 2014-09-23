@@ -1,4 +1,4 @@
-<%- headers = ['id', 'ques', 'quetype', 'multichoice', 'isactive', 'answers', 'options'] -%>
+<%- headers = ['id', 'question', 'subject', 'multichoice', 'isactive', 'answers', 'options'] -%>
 <%= CSV.generate_line headers %>
 <%- @questions.each do |question| 
   @optionarr = Array.new 

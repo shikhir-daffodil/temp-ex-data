@@ -8,7 +8,7 @@
       Email:<br> <%= f.email_field :email%>
       Phone No.:<br> <%= f.phone_field :phone%>
       Experience(yrs):<br><%= f.number_field :experience, in: 0...25 %>
-      User Type: <%= f.select :usertype, options_for_select(%w[Examinee Examiner Admin]) %><br> 
+      User Type: <%= f.select :usertype, options_for_select(%w[Examinee Admin]) %><br> 
       Activity:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <%= f.select :activity, options_for_select(%w[Active Inactive]) %><br>
       <div class="smallmsg">*Password will be generated randomly and will be sent to the email provided.</div>
       <hr>
