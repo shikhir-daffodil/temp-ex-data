@@ -1,22 +1,25 @@
 <% provide(:title, 'Edit Question') %>
 <script>
   $(document).ready(function() {
-    $("#delopt").css({"opacity": "0.3"});
     var MaxInputs = 5; //maximum input boxes allowed
-    var x = $(".options_div input").length; //initlal options text box count 
+    var x = $(".options_div input").length; //initlal options text box count
+    if(x == 5)
+      $("#addopt").css({"opacity": "0.3"});
+    else
+      $("#delopt").css({"opacity": "0.3"});
     $("#addopt").click(function(e)  //on add input button click
     {
       if (x < MaxInputs) //max input box allowed
       {
         x++; //text box increment
-        $(".options_div").append('<input id="options_5" type="text" name="options[5]">');
+        $(".options_div").append('<input id="options_o5" type="text" name="options[o5]">');
         $("#delopt").css({"opacity": "1"});
         $("#addopt").css({"opacity": "0.3"});
       }
     });
     $("body").on("click", "#delopt", function(e) { //user click on remove text
-      if (x == 5) {
-        $($("#options_5")).remove(); //remove text box
+      if (x >= 5) {
+        $($("#options_o5")).remove(); //remove text box
         x--; //decrement textbox
         $("#addopt").css({"opacity": "1"});
         $("#delopt").css({"opacity": "0.3"});

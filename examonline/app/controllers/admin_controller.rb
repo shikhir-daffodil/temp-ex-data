@@ -193,19 +193,55 @@ class AdminController < ApplicationController
       end
       len = var_opt.length
       var = 0
-      @options.each do |opt|
-        if !var_opt[var].blank?
-          if var < len
-            @option = QuestionOption.find(opt.id)
-            @option.update(:option => var_opt[var].strip)
-            var = var + 1
-            chk = true
+      if len == @options.length && len > 3 && len < 6
+        @options.each do |opt|
+          if !var_opt[var].blank?
+            if var < len
+              @option = QuestionOption.find(opt.id)
+              @option.update(:option => var_opt[var].strip)
+              var = var + 1
+              chk = true
+            end
+          else
+            flash[:notice] = "Blank option not allowed"
+            chk = false
+            break
           end
-        else
-          flash[:notice] = "Blank option not allowed"
-          chk = false
-          break
         end
+      elsif len < @options.length && len > 3 && len < 6
+        QuestionOption.find_by(question_id: session[:temp_id]).delete
+        @options = @question.question_options.where(question_id: session[:temp_id])
+        @options.each do |opt|
+          if !var_opt[var].blank?
+            if var < len
+              @option = QuestionOption.find(opt.id)
+              @option.update(:option => var_opt[var].strip)
+              var = var + 1
+              chk = true
+            end
+          else
+            flash[:notice] = "Blank option not allowed"
+            chk = false
+            break
+          end
+        end
+      elsif len > @options.length && len > 3 && len < 6
+        @a = QuestionOption.new(question_id: session[:temp_id], option: var_opt[len - 1])
+        @a.save
+        @options.each do |opt|
+          if !var_opt[var].blank?
+            if var < len
+              @option = QuestionOption.find(opt.id)
+              @option.update(:option => var_opt[var].strip)
+              var = var + 1
+              chk = true
+            end
+          else
+            flash[:notice] = "Blank option not allowed"
+            chk = false
+            break
+          end
+        end        
       end
       @options = @question.question_options.where(question_id: session[:temp_id])
       @options.each do |opt|
@@ -391,7 +427,7 @@ class AdminController < ApplicationController
       CSV.foreach(params[:file].path, headers: true) do |line|
         @id = line.to_hash["id"]
         if !@id.blank?
-          if !line.to_hash["answers"].blank? && !line.to_hash["options"].blank? && !line.to_hash["question"].blank? && !line.to_hash["subject"].blank? && !line.to_hash["multichoice"].blank? && !line.to_hash["isactive"].blank?
+          if !line.to_hash["answers"].blank? && !line.to_hash["options"].blank? && !line.to_hash["question"].blank? && !line.to_hash["subject"].blank? && !line.to_hash["multichoice"].blank? && !line.to_hash["isactive"].blank? && (line.to_hash["options"].split(",").length > 3)
             if !Question.find_by_id(@id).blank?
               #------------------- Update Question
               answers = line.to_hash["answers"].split(",")
@@ -409,18 +445,52 @@ class AdminController < ApplicationController
                 end
                 len = var_opt.length
                 var = 0
-                @options.each do |opt|
-                  if !var_opt[var].blank?
-                    if var < len
-                      @option = QuestionOption.find(opt.id)
-                      @option.update(:option => var_opt[var].strip)
-                      var = var + 1
-                      chk = true
+                if len == @options.length && len > 3 && len < 6        
+                  @options.each do |opt|
+                    if !var_opt[var].blank?
+                      if var < len
+                        @option = QuestionOption.find(opt.id)
+                        @option.update(:option => var_opt[var].strip)
+                        var = var + 1
+                        chk = true
+                      end
+                    else
+                      chk = false
+                      break
                     end
-                  else
-                    chk = false
-                    break
                   end
+                elsif len < @options.length && len > 3 && len < 6
+                  QuestionOption.find_by(question_id: @id).delete
+                  @options = @question.question_options.where(question_id: @id)        
+                  @options.each do |opt|
+                    if !var_opt[var].blank?
+                      if var < len
+                        @option = QuestionOption.find(opt.id)
+                        @option.update(:option => var_opt[var].strip)
+                        var = var + 1
+                        chk = true
+                      end
+                    else
+                      chk = false
+                      break
+                    end
+                  end
+                elsif len > @options.length && len > 3 && len < 6
+                  @a = QuestionOption.new(question_id: @id, option: var_opt[len - 1])
+                  @a.save        
+                  @options.each do |opt|
+                    if !var_opt[var].blank?
+                      if var < len
+                        @option = QuestionOption.find(opt.id)
+                        @option.update(:option => var_opt[var].strip)
+                        var = var + 1
+                        chk = true
+                      end
+                    else
+                      chk = false
+                      break
+                    end
+                  end       
                 end
                 @options = @question.question_options.where(question_id: @id)
                 @options.each do |opt|
@@ -490,7 +560,7 @@ class AdminController < ApplicationController
         flash[:notice] = "Questions added or modified successfully "
       else
         @invalid_ids = @invalid_ids.join(", ")
-        flash[:notice] = "These were not added or modified due to some error " + @invalid_ids
+        flash[:notice] = "These were not added or modified due to some error: " + @invalid_ids
       end
       redirect_to action: 'csv_actions'
     else
